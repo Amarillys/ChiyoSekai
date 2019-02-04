@@ -1,0 +1,15 @@
+{
+  "name": "chiyosekai-electron",
+  "version": "0.0.1",
+  "description": "ChiyoSekai Music Player By \u0014https://github.com/Amarillys",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "https://github.com/Amarillys",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^4.0.4",
+    "music-metadata": "^3.5.1"
+  }
+}

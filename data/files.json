@@ -1,0 +1,19 @@
+[{
+    "name": "Pure",
+    "child": [{
+        "name": "2.14",
+        "url" : "D:/CloudMusic/music/2.14.mp3",
+        "artist": "Maikaze"
+    }, {
+        "name": "himitsu",
+        "child": [{
+            "name": "hiyori06",
+            "url" : "D:/CloudMusic/music/hiyori06.mp3",
+            "artist": "hiyori"
+        }]
+    }]
+}, {
+    "name": "Ember Soul",
+    "url" : "D:/CloudMusic/music/ember.mp3",
+    "artist": "水色夏音"
+}]
