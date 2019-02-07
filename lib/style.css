@@ -15,7 +15,6 @@ body {
 #filelist {
   padding-top : 10px;
   padding-left: 10px;
-  border: 1px solid #333333;
   display: flex;
   height: calc(100% - 38px);
 }
