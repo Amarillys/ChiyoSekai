@@ -1,4 +1,6 @@
-[{ "name": "Pure", "content": [{
+[{  "name": "Pure",
+    "id": "Amarillys@Pure",
+    "content": [{
     "name": "Ember Soul",
     "url" : "http://misuzu.moe/music/ember.mp3",
     "artist": "水色夏音"
@@ -7,4 +9,8 @@
     "url" : "D:/CloudMusic/music/2.14.mp3",
     "artist": "Maikaze"
 }]
-}, { "name": "Empty", "content": []}]
+}, {
+    "name": "Empty",
+    "content": [],
+    "id": "Amarillys@Empty"
+}]

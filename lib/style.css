@@ -1,10 +1,15 @@
 body {
   position: relative;
+  margin: 0px; 
+  font-family: Microsoft Yahei UI;
+}
+
+#chiyosekai {
+  position: relative;
 }
 
 #left {
-  display: inline-block;
-  position: absolute;
+  float: left;
 }
 
 #filelist {
@@ -46,27 +51,22 @@ body {
   width: 400px;
 }
 
-#bk {
-  width: 398px;
-  height: 398px;
-  border: 1px solid #333333;
-  display: block;
+.toolbtn {
+  display: inline-block;
+}
+
+#viewer, #propertyWin {
+  display: inline-block;
 }
 
 #center {
-  left: 405px;
-  position: absolute;
+  display: inline-block;
 }
 
 #playlist {
   height: 640px;
   border: 1px solid #333333;
   width: 700px;
-}
-
-#tablist {
-  height: 24px;
-  border: 1px solid #333333;
 }
 
 .tab {
@@ -96,4 +96,12 @@ tr {
 
 tr:nth-of-type(odd) {
   background: #F8F8F8;
+}
+
+tr.activeMusic {
+  background: #22ae63;
+}
+
+.tab.active {
+  background-color: #22ae63;
 }

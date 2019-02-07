@@ -1,0 +1,48 @@
+{
+    "userid": "Guest",
+    "passwd": "",
+    "config": {
+        "playList": ["Amarillys@Pure", "Amarillys@Empty"],
+        "loopMode": "0"
+    },
+    "theme" : {
+        "toolbar" : {
+            "width": 600,
+            "lines": 1,
+            "buttons": {
+                "stop": {
+                    "icon": "./data/img/stop.svg"
+                },
+                "play": {
+                    "icon": "./data/img/play.svg"
+                },
+                "pause": {
+                    "icon": "./data/img/pause.svg"
+                },
+                "next": {
+                    "icon": "./data/img/next.svg"
+                },
+                "last": {
+                    "icon": "./data/img/last.svg"
+                },
+                "random": {
+                    "icon": "./data/img/random.svg"
+                }
+            },
+            "volumnbar" : {
+                "width": 120
+            },
+            "timebar": {
+                
+            }
+        },
+        "global": {
+            "background": "#040415"
+        },
+        "filelist": {
+            "musicIcon" : "./img/music.svg",
+            "folderIcon": "./img/folder.svg",
+            "returnIcon": "./img/return.svg"
+        }
+    }
+}
