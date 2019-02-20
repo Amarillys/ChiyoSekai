@@ -1,7 +1,7 @@
 /* config: auto load info of files */
 /* eslint-env browser */
 /* global Vue */
-const locale = 'zh_CN';
+global.locale = 'zh_CN';
 
 global.init = function (chiyosekai) {
     /* loading local config.json, check if online logined */
@@ -19,11 +19,11 @@ global.init = function (chiyosekai) {
         if (err) return;
         chiyosekai.loadFiles(JSON.parse(data));
     });
-}
+};
 
 global.getUserdata = function(userid, callback) {
     fetch().then(userdata => callback(userdata)).catch( err => console.log(err) );
-}
+};
 
 global.chiyosekai = new global.ChiyoSekai({ el: '#chiyosekai' });
 global.init(global.chiyosekai);

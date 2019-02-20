@@ -1,7 +1,7 @@
 const global = this;
 global.eval = function () {
-    throw new Error(`Sorry, this app does not support window.eval().`)
-}
+    throw new Error('Sorry, this app does not support window.eval().');
+};
 
 global.LOOP = {
     ListLoop: 0,
@@ -9,7 +9,7 @@ global.LOOP = {
     OneLoop : 2,
     OneOnce : 3,
     Random  : 4
-}
+};
 
 global.default = {
     "userid": "Guest",
@@ -56,7 +56,7 @@ global.default = {
                 "width": 120,
             },
             "timebar": {
-                
+
             }
         },
         "global": {

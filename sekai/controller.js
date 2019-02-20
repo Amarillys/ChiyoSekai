@@ -4,7 +4,7 @@ global.Controller = Vue.extend({
         return {
             working: true,
             config : global.default.theme.controller
-        }
+        };
     },
     template:
     `
@@ -29,7 +29,7 @@ global.Controller = Vue.extend({
     },
     methods: {
         btnHandler(button) {
-            switch(button) {
+            switch (button) {
                 case 'play':
                     return this.playMusic(this.curlist, this.playing);
                 case 'stop':
@@ -40,12 +40,12 @@ global.Controller = Vue.extend({
                     return this.$emit('playMusic', this.playing - 1);
                 case 'pause':
                     return this.pause();
-                case 'random': 
+                case 'random':
                     return this.$emit('playMusic', Math.floor(Math.random() * this.lists[this.curlist].content.length + 0.5));
             }
         },
         playMusic(curlist, index) {
-            if (index == this.playing)
+            if (index === this.playing)
                 return (this.$refs.control.load(), this.play());
             fetch(this.lists[curlist].content[index].url, { headers: { Range: "bytes=0-1" } })
             .then( () => {
@@ -91,8 +91,8 @@ global.Controller = Vue.extend({
                 stop   : { zh_CN: '停止',   en: 'Stop'  },
                 pause  : { zh_CN: '暂停',   en: 'Pause' },
                 last   : { zh_CN: '上一首', en: 'Last'  },
-                random : { zh_CN: '随机',   en: 'Random'},
-            }[key][locale];
+                random : { zh_CN: '随机',  en: 'Random' },
+            }[key][global.locale];
         }
     }
 });

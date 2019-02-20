@@ -42,7 +42,7 @@ global.PlayList = Vue.extend({
                 name   : { zh_CN: '音乐名', en: 'Music Name'},
                 artist : { zh_CN: '艺术家', en: 'Artist'},
                 url    : { zh_CN: '来源网址', en: 'Source URL'}
-            }[key][locale];
+            }[key][global.locale];
         }
     },
 });
