@@ -16,21 +16,24 @@ global.default = {
     "passwd": "",
     "config": {
         "width"   : 400,
-        "height"  : 300,
         "playList": ["Guest@Empty"],
-        "loopMode": "0"
+        "loopMode": "0",
+        "fontColor" : "#D4C380",
+        "fontFamily": "\"Source Han Sans SC\", sans-serif"
     },
     "theme" : {
         "cover": {
+            "background": "rgba(40, 40, 40, 0.9)",
             "height": 200,
             "width" : 200
         },
         "controller" : {
+            "background": "rgba(40, 40, 40, 0.9)",
             "width": 600,
             "height": 30,
-            "buttonWidth": 26,
-            "buttonHeight": 26,
-            "buttonIndent": 4,
+            "buttonWidth": 24,
+            "buttonHeight": 24,
+            "buttonIndent": 6,
             "lines": 1,
             "buttons": {
                 "stop": {
@@ -60,25 +63,34 @@ global.default = {
             }
         },
         "global": {
-            "background": "#22ce64"
+            "background": "#1E1E1E"
         },
         "playlist": {
+            "background": "rbga(30, 30, 30, 0.9)",
             "width": 700,
-            "height": 570,
             "tab" : {
                 "height": 24,
+                "fontSize": "1.1em"
             }
         },
         "filelist": {
+            "background"  : "rgba(40, 40, 40, 0.9)",
+            "searchBg": "rgba(48, 48, 48, 0.9)",
+            "searchSize": "1.2em",
+            "searchColor": "#D4C380",
+            "searchHeight": 32,
             "musicIcon" : "./img/music.svg",
             "folderIcon": "./img/folder.svg",
-            "returnIcon": "./img/return.svg"
+            "returnIcon": "./img/return.svg",
+            "borderColor": "#111111",
+            "bg" : "#282828"
         },
         "property": {
             "width": 200,
             "height": 300,
         },
         "user": {
+            "background": "rgba(48, 48, 48, 0.9)",
             "width" : 200,
             "height": 100,
             "avatarMargin": 10,

@@ -5,6 +5,13 @@
     },
     "globals": {
         "Vue": true,
-        "global": true
+        "global": true,
+        "PlayList": true,
+        "Property": true,
+        "Cover": true,
+        "Controller": true,
+        "User": true,
+        "Lyric": true,
+        "Uint8Array": true
     }
 }

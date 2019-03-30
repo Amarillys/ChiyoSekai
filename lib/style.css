@@ -1,3 +1,9 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Source Hans Sans', sans-serif;
+}
+
 body {
   position: relative;
   margin: 0px; 
@@ -6,17 +12,37 @@ body {
 
 #chiyosekai {
   position: relative;
+  display: flex;
+  overflow: hidden;
 }
 
-#left {
-  float: left;
+.chiyo-left, .chiyo-right {
+  display: inline-block;
+}
+
+
+#file-container {
+  height: calc(100% - 306px);
 }
 
 #filelist {
-  padding-top : 10px;
-  padding-left: 10px;
+  padding-top : 5px;
   display: flex;
-  height: calc(100% - 38px);
+  height: calc(100% - 34px);
+}
+
+.chiyo-height-fill {
+  height: -webkit-fill-available;
+  height: fill-available;
+}
+
+#filesearch {
+  width: 100%;
+  border: none;
+}
+
+#filesearch:focus {
+  outline-color: rgba(116, 175, 226, 0.9)
 }
 
 .file {
@@ -54,18 +80,17 @@ body {
   display: inline-block;
 }
 
-#viewer, #propertyWin {
+#cover, #propertyWin {
   display: inline-block;
 }
 
 #center {
   display: inline-block;
+  width: calc(100% - 400px);
 }
 
 #playlist {
-  height: 640px;
-  border: 1px solid #333333;
-  width: 700px;
+  height: calc(100% - 33px);
 }
 
 .tab {
@@ -76,7 +101,7 @@ body {
 
 #list {
   height: 724px;
-  border: 1px solid #333333;
+  border-collapse: collapse;
 }
 
 .header {
@@ -90,11 +115,11 @@ table>thead {
 }
 
 tr {
-  background: #8AF7F7;
+  background: #00000000;
 }
 
 tr:nth-of-type(odd) {
-  background: #F8F8F8;
+  background: rgba(50,50,50,0.9);
 }
 
 tr.activeMusic {
@@ -103,4 +128,8 @@ tr.activeMusic {
 
 .tab.active {
   background-color: #22ae63;
+}
+
+.tab.inactive {
+  color: #D4C380;
 }

@@ -1,21 +1,24 @@
 global.Controller = Vue.extend({
-    props: ['curlist', 'lists', 'playing', 'toolbar'],
+    props: ['curlist', 'lists', 'playing', 'toolbar', 'theme'],
     data() {
         return {
+            config: null,
             working: true,
-            config : global.default.theme.controller
         };
     },
     template:
     `
-    <div id="controller">
-        <audio  @ended="$emit('next')" ref="control">
+    <div id="controller" :style="{ background: theme.background }">
+        <audio @ended="$emit('next')" ref="control">
             <source ref="source" id="player" src>
         </audio>
-        <div id="toolbar" :style="{ height: config.height + 'px' }">
-            <div v-for="button in Object.keys(config.buttons)"  class="toolbtn" :style="{ background: config.buttons[button].icon, 
-                width: config.buttonWidth + 'px', height: config.buttonHeight + 'px', 'background-size': 'cover',
-                margin: marginV + 'px ' + config.buttonIndent + 'px ' + marginV + 'px ' + config.buttonIndent + 'px'}"
+        <div id="toolbar" :style="{ height: theme.height + 'px', padding : '2px' }">
+            <div v-for="button in Object.keys(theme.buttons)" class="toolbtn"
+            :style="{ background: theme.buttons[button].icon,
+                width: theme.buttonWidth + 'px',
+                height: theme.buttonHeight + 'px',
+                'background-size': 'cover',
+                margin: marginV + 'px ' + theme.buttonIndent + 'px ' + marginV + 'px ' + theme.buttonIndent + 'px'}"
                 @click="btnHandler(button)" :title="text(button)">
             </div>
         </div>
@@ -24,7 +27,8 @@ global.Controller = Vue.extend({
     `,
     computed: {
         marginV() {
-            return (this.config.height - this.config.buttonHeight) / 2 > 0 ? (this.config.height - this.config.buttonHeight) / 2 : 0;
+            return (this.theme.height - this.theme.buttonHeight) / 2 > 0 ?
+                (this.theme.height - this.theme.buttonHeight) / 2 : 0;
         },
     },
     methods: {

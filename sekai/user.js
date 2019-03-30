@@ -5,16 +5,16 @@ global.User = Vue.extend({
             avatar: 'https://misuzu.moe/store/image/qq.jpg'
         };
     },
-    props: ['config'],
+    props: ['theme'],
     computed: {
         avatarSize() {
-            return (Math.min(this.config.height, this.config.width) - this.config.avatarMargin * 2) + 'px';
+            return (Math.min(this.theme.height, this.theme.width) - this.theme.avatarMargin * 2) + 'px';
         }
     },
     template:
     `
-    <div id="user" :style="{ height: config.height + 'px', width: config.width + 'px' }">
-        <img id="avatar" :style="{ height: avatarSize, width: avatarSize, margin: config.avatarMargin + 'px' }" :src="avatar"></img>
+    <div id="user" :style="{ height: theme.height + 'px', width: theme.width + 'px' }">
+        <img id="avatar" :style="{ height: avatarSize, width: avatarSize, margin: theme.avatarMargin + 'px' }" :src="avatar"></img>
         <div>
             <div></div>
             <div></div>

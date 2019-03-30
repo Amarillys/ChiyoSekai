@@ -1,11 +1,10 @@
 
 global.FileList = Vue.extend({
-    props : ['files', 'userConfig', 'userTheme'],
+    props : ['files', 'userConfig', 'theme'],
     data() {
         return {
             view   : [{ "name": "Empty", "child": [] }],
             config : global.default.config,
-            theme  : global.default.theme,
             parent : null,
             search : '',
         };
@@ -18,16 +17,26 @@ global.FileList = Vue.extend({
         },
     },
     mounted() {
-        this.view    = this.files;
-        this.parent  = null;
+        this.view   = this.files;
+        this.parent = null;
     },
     template :
     `
-    <div :style="{ width: this.config.width + 'px', height: this.config.height + 'px' }">
-        <div>
-            <input type="text" v-model="search" :style="{ width: this.config.width - 4 + 'px', height: '24px', 'font-size': '1.1em' }"></input>
+    <div id="file-container" :style="{ width: config.width + 'px' }">
+        <div >
+            <input id="filesearch" type="text" v-model="search" :style="{
+                height: theme.searchHeight + 'px',
+                fontSize   : theme.searchSize,
+                fontFamily : config.fontFamily,
+                color      : theme.searchColor,
+                background : theme.searchBg
+            }"></input>
         </div>
-        <div id="filelist">
+        <div id="filelist" :style="{
+            background : theme.background,
+            color      : config.fontColor,
+            height     : (theme.height - 4 - 5 - theme.inputHeight) + 'px'
+        }">
             <div class="file back" v-if="this.parent != null" @click="exit()">
                 <img class="fileicon return"></img>
                 <span class="filename">{{ text("back") }}</span>

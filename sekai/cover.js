@@ -1,5 +1,5 @@
 global.Cover = Vue.extend({
-    props: ['config'],
+    props: ['theme', 'config'],
     data() {
         return {
             url: null
@@ -7,12 +7,16 @@ global.Cover = Vue.extend({
     },
     template:
     `
-    <div id="viewer" :style="{ width: config.width + 'px', height: config.height + 'px' }">
-        <img id="cover" :src="this.url" :style="{ width: config.width + 'px', height: config.height + 'px' }">
+    <div id="cover" :style="{
+        width: theme.width + 'px',
+        height: theme.height + 'px',
+        background: theme.background
+    }">
+        <img id="cover" :src="this.url" :style="{ width: theme.width + 'px', height: theme.height + 'px' }">
     </div>
     `,
     methods: {
-        setImgUrl(url) {    
+        setImgUrl(url) {
             this.url = url;
         }
     }

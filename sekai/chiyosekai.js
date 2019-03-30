@@ -5,29 +5,35 @@ global.ChiyoSekai = Vue.extend({
             files   : [{ "name": "Empty", "child": [] }],
             curlist : 0,
             lists   : [{ "name": "Empty", "content": [] }],
-            listview: [{ name: 'name', width: 120}, { name: 'artist', width: 80}, { name: 'url'}],
+            listview: [{ name: 'name', width: 120 }, { name: 'artist', width: 80 }, { name: 'url' }],
             playing : null,
             loop    : global.LOOP.ListLoop,
-            config  : global.default
+            config  : global.default,
+            theme   : global.default.theme
         };
     },
     components: { FileList, PlayList, Property, Lyric, Cover, Controller, User },
-    template: 
+    template:
     `
-    <div id="chiyosekai" :style="{ height: '100%', width: '100%', background: this.config.theme.global.background }">
-        <div id="left">
-            <FileList ref="filelist" :files="files" v-on:addMusic="addMusic"></FileList>
-            <div id="leftleft">
-                <User :config="config.theme.user"></User>
-                <Cover ref="cover" :config="config.theme.cover"></Cover>
+    <div id="chiyosekai" :style="{ height: '100%', width: '100%', background: config.theme.global.background }">
+        <div id="chiyo-left">
+            <FileList ref="filelist" :files="files" v-on:addMusic="addMusic" :theme="theme.filelist"></FileList>
+            <div class="leftbottom">
+                <div class="chiyo-left">
+                    <User :theme="config.theme.user"></User>
+                    <Cover ref="cover" :theme="config.theme.cover"></Cover>
+                </div>
+                <div class="chiyo-right">
+                    <Property ref="property" :config="config.theme.property"></Property>
+                </div>
             </div>
-            <Property ref="property" :config="config.theme.property"></Property>
         </div>
         <div id="center">
-            <Controller ref="controller" :playing="playing" :lists="lists" :config="config.theme.controller"
+            <Controller ref="controller" :playing="playing" :lists="lists" :theme="theme.controller"
                 :curlist="curlist" :list="curlist" v-on:playMusic="playMusic"></Controller>
-            <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist" :config="config.theme.playlist"
-                v-on:choose="chooseMusic" v-on:playMusic="playMusic" v-on:switchList="switchList"></PlayList>
+            <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist"
+                :theme="config.theme.playlist" :config="config.config" v-on:choose="chooseMusic"
+                v-on:playMusic="playMusic" v-on:switchList="switchList"></PlayList>
         </div>
         <div id="right">
             <Lyric ref="lyric"></Lyric>
@@ -43,9 +49,9 @@ global.ChiyoSekai = Vue.extend({
         },
         nextMusic() {
             let listLength = this.lists[this.curlist].content.length;
-            switch(this.loop) {
+            switch (this.loop) {
                 case global.LOOP.ListLoop:
-                    return this.playMusic(this.playing + 1 >= listLength ?　0 : this.playing + 1);
+                    return this.playMusic(this.playing + 1 >= listLength ? 0 : this.playing + 1);
                 case global.LOOP.ListOnce:
                     return this.playing + 1 >= listLength ? null : this.playMusic(this.playing + 1);
                 case global.LOOP.OneLoop:
@@ -57,7 +63,7 @@ global.ChiyoSekai = Vue.extend({
             }
         },
         playMusic(index) {
-            if (this.lists[this.curlist].content.length == 0)
+            if (this.lists[this.curlist].content.length === 0)
                 return;
             if (index >= this.lists[this.curlist].content.length)
                 index = 0;
@@ -89,11 +95,11 @@ global.ChiyoSekai = Vue.extend({
                 cover    : null,
                 length: 0,
             };
-            if (music.url.toLowerCase().startsWith('http')  || music.url.toLowerCase().startsWith('ftp') ) {
+            if (music.url.toLowerCase().startsWith('http') || music.url.toLowerCase().startsWith('ftp') ) {
                 // deal with web file
                 global.jsmediatags.read(music.url, {
                     onSuccess: tag => {
-                        music.info.cover = URL.createObjectURL(new Blob([Uint8Array.from(tag.tags.picture.data)], { type: tag.tags.picture.format }))
+                        music.info.cover = URL.createObjectURL(new Blob([Uint8Array.from(tag.tags.picture.data)], { type: tag.tags.picture.format }));
                         callback(music.info);
                     },
                     onError: err => console.log(err)
