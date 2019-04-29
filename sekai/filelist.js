@@ -1,4 +1,3 @@
-
 global.FileList = Vue.extend({
     props : ['files', 'userConfig', 'theme'],
     data() {
@@ -40,8 +39,8 @@ global.FileList = Vue.extend({
             <div class="file back" v-if="this.parent != null" @click="exit()">
                 <img class="fileicon return"></img>
                 <span class="filename">{{ text("back") }}</span>
-            </div> 
-            <div class="file" v-for="file in view.filter(file => file.name.includes(this.search))" @dblclick="enter(file.name)">
+            </div>
+            <div class="file" v-for="file in view.filter(file => file.name.includes(this.search) || (file.artist && file.artist.includes(this.search)) )" @dblclick="enter(file.name)" :title="file.name">
                 <img class="fileicon" :class="{ folder: !(file.child == undefined || file.child == null), music : (file.child == undefined || file.child == null) }"></img>
                 <span class="filename">{{ file.name }}</span>
             </div>
@@ -61,7 +60,7 @@ global.FileList = Vue.extend({
         enter(filename) {
             let target = this.view.find( file => file.name === filename );
             if (target.child) {
-                this.parent =  {
+                this.parent = {
                     content: this.view,
                     parent : this.parent
                 };

@@ -2,6 +2,15 @@
 /* eslint-env browser */
 /* global Vue */
 global.locale = 'zh_CN';
+global.user   = 'chiyo';
+global.getFileList = require('./lib/getFileList');
+/* https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
+global.uuid = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+};
 
 global.init = function (chiyosekai) {
     /* loading local config.json, check if online logined */
@@ -19,10 +28,55 @@ global.init = function (chiyosekai) {
         if (err) return;
         chiyosekai.loadFiles(JSON.parse(data));
     });
+    const playlists = global.getFileList(path.resolve(__dirname, 'data/playlist'), ['son']);
+    if (playlists.length > 0) {
+        playlists.forEach(list => fs.readFile(list, (err, data) => {
+            if (err) return;
+            data = JSON.parse(data);
+            if (data.user === global.user)
+                chiyosekai.loadList(data);
+        }));
+    }
 };
 
 global.getUserdata = function(userid, callback) {
     fetch().then(userdata => callback(userdata)).catch( err => console.log(err) );
+};
+
+global.getInfo = function(music, callback) {
+    Object.assign(music, {
+        artist: null,
+        cover    : null,
+    });
+    if (music.url.toLowerCase().startsWith('http') || music.url.toLowerCase().startsWith('ftp') ) {
+        // deal with web file
+        global.jsmediatags.read(music.url, {
+            onSuccess: tag => {
+                music.cover = URL.createObjectURL(new Blob([Uint8Array.from(tag.tags.picture.data)], { type: tag.tags.picture.format }));
+                callback(music);
+            },
+            onError: err => console.log(err)
+        });
+    } else {
+        // deal with local file(electron only)
+        if (!(global.require && global.require('music-metadata')))
+            return console.log('Local files are allowed only on electron(desktop).');
+        const tagReader = require('music-metadata');
+        tagReader.parseFile(music.url).then( info => {
+            if (info.common.picture)
+                music.cover = URL.createObjectURL(new Blob([Uint8Array.from(info.common.picture[0].data)], { type: info.common.picture[0].format }));
+            Object.assign(music, {
+                artist:     info.common.artist,
+                title:      info.common.title,
+                album:      info.common.album,
+                format:     info.format.dataformat,
+                bitrate:    info.format.bitrate,
+                sampleRate: info.format.sampleRate,
+                duration:   `${Math.floor(info.format.duration / 60)}:${Math.floor(info.format.duration % 60)}`
+            });
+            callback(music);
+        }).catch(err => console.log(err));
+    }
 };
 
 global.chiyosekai = new global.ChiyoSekai({ el: '#chiyosekai' });

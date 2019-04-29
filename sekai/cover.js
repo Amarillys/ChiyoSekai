@@ -3,7 +3,7 @@ global.Cover = Vue.extend({
     data() {
         return {
             url: null
-        }
+        };
     },
     template:
     `

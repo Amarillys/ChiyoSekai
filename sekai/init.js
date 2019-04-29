@@ -35,26 +35,43 @@ global.default = {
             "buttonHeight": 24,
             "buttonIndent": 6,
             "lines": 1,
-            "buttons": {
-                "stop": {
-                    icon: "url(./img/stop.svg)",
-                },
-                "play": {
-                    icon: "url(./img/play.svg)",
-                },
-                "pause": {
-                    icon: "url(./img/pause.svg)",
-                },
-                "last": {
-                    icon: "url(./img/last.svg)",
-                },
-                "next": {
-                    icon: "url(./img/next.svg)",
-                },
-                "random": {
-                    icon: "url(./img/random.svg)",
-                }
-            },
+            "buttons": [{
+                name: "open",
+                icon: "url(./img/open.svg)",
+            }, {
+                name: "split",
+                icon: "url(./img/split.svg)",
+            }, {
+                name: "play",
+                icon: "url(./img/play.svg)",
+            }, {
+                name: "stop",
+                icon: "url(./img/stop.svg)",
+            }, {
+                name: "pause",
+                icon: "url(./img/pause.svg)",
+            }, {
+                name: "last",
+                icon: "url(./img/last.svg)",
+            }, {
+                name: "next",
+                icon: "url(./img/next.svg)",
+            }, {
+                name: "random",
+                icon: "url(./img/random.svg)",
+            }, {
+                name: "split",
+                icon: "url(./img/split.svg)",
+            }, {
+                name: "add",
+                icon: "url(./img/add.svg)",
+            }, {
+                name: "save",
+                icon: "url(./img/save.svg)",
+            }, {
+                name: "delete",
+                icon: "url(./img/delete.svg)",
+            }],
             "volumnbar" : {
                 "width": 120,
             },
@@ -70,7 +87,8 @@ global.default = {
             "width": 700,
             "tab" : {
                 "height": 24,
-                "fontSize": "1.1em"
+                "fontSize": "1.1em",
+                "maxWidth": "160px"
             }
         },
         "filelist": {
@@ -92,7 +110,7 @@ global.default = {
         "user": {
             "background": "rgba(48, 48, 48, 0.9)",
             "width" : 200,
-            "height": 100,
+            "height": 108,
             "avatarMargin": 10,
         }
     }

@@ -1,7 +1,7 @@
 html, body {
   height: 100%;
   width: 100%;
-  font-family: 'Source Hans Sans', sans-serif;
+  font-family: '微软雅黑', sans-serif;
 }
 
 body {
@@ -20,6 +20,9 @@ body {
   display: inline-block;
 }
 
+input {
+  font-family: '微软雅黑', sans-serif
+}
 
 #file-container {
   height: calc(100% - 306px);
@@ -27,8 +30,22 @@ body {
 
 #filelist {
   padding-top : 5px;
-  display: flex;
-  height: calc(100% - 34px);
+  display: block;
+  height: calc(100% - 38px);
+  overflow: auto;
+}
+
+#filelist>.file {
+  margin-left: 5px;
+}
+
+#filelist::-webkit-scrollbar {
+  width: 15px;
+}
+
+#filelist::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(88, 88, 88, 0.6);
 }
 
 .chiyo-height-fill {
@@ -70,14 +87,23 @@ body {
 
 .filename {
   display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-#controller {
-  width: 400px;
+.nowrap {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .toolbtn {
   display: inline-block;
+}
+
+.toolbtn:hover {
+  opacity: 0.8;
 }
 
 #cover, #propertyWin {
@@ -93,15 +119,14 @@ body {
   height: calc(100% - 33px);
 }
 
-.tab {
-  display: table-cell;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
 #list {
   height: 724px;
   border-collapse: collapse;
+  text-align: center;
+}
+
+#list td {
+  font-weight: 500;
 }
 
 .header {
@@ -111,7 +136,7 @@ body {
 
 table>thead {
   color: #ffffff;
-  background: #4aa0e9;
+  background: #1e3d56;
 }
 
 tr {
@@ -123,7 +148,13 @@ tr:nth-of-type(odd) {
 }
 
 tr.activeMusic {
-  background: #22ae63;
+  background: #395647;
+}
+
+.tab {
+  display: table-cell;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .tab.active {
@@ -132,4 +163,93 @@ tr.activeMusic {
 
 .tab.inactive {
   color: #D4C380;
+  background: rgba(40, 40, 40, 0.9)
+}
+
+.noborder {
+  border: none;
+}
+
+#mask {
+  background-color: #233333;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+}
+
+#avatar {
+  border-radius: 1rem;
+}
+
+/* PromptWindow Style */
+:root {
+  --title-bg: rgba(26, 26, 26, 0.9);
+  --font-color: rgba(233, 233, 233, 0.9);
+  --font-family: "思源黑体", "微软雅黑";
+}
+
+#p-mask {
+  background-color: rgba(42, 52, 55);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(3px);
+  transition: opacity 0.5s ease-in;
+}
+
+#prompt-window > #body {
+  padding: 16px 10px 20px 10px;
+}
+
+#prompt-window {
+  width: 300px;
+  background-color: rgba(57, 65, 68, 0.9);
+  border-radius: 8px;
+  z-index: 955159879465;
+}
+
+#prompt-window > #header {
+  background-color: var(--title-bg);
+  color: var(--font-color);
+  font-size: 1.2rem;
+  height: 30px;
+  border-radius: 8px 8px 0 0;
+  padding: 5px 8px;
+  text-align: center;
+}
+
+#prompt-window #text {
+  color: var(--font-color);
+  font-size: 1.1rem;
+  text-indent: 2em;
+}
+
+#prompt-window #footer {
+  margin-top: 30px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+#prompt-window button {
+  background-color: #111;
+  border: none;
+  border-radius: 5px;
+  color: var(--font-color);
+  font-size: 1.1rem;
+  padding: 5px 16px;
+  margin-left: 10px;
+  font-family: var(--font-family);
+}
+
+#prompt-window button:hover {
+  background-color: rgba(36, 36, 36, 0.9);
+  transition: background-color 0.3s ease-in;
 }

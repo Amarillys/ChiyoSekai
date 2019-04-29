@@ -7,6 +7,7 @@ function createWindow () {
         webPreferences: {
             nodeIntegration: true,
             webSecurity: true,
+            experimentalFeatures: true
         },
         contentSecurityPolicy: `
             script-src 'self' 'https://unpkg.com' 'https://misuzu.moe';

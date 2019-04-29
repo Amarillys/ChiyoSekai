@@ -4,40 +4,48 @@ global.ChiyoSekai = Vue.extend({
         return {
             files   : [{ "name": "Empty", "child": [] }],
             curlist : 0,
-            lists   : [{ "name": "Empty", "content": [] }],
-            listview: [{ name: 'name', width: 120 }, { name: 'artist', width: 80 }, { name: 'url' }],
+            lists   : [{ name: 'sekai', user: 'chiyo', content: [] }],
+            listview: [{ name: 'name', width: 150 }, { name: 'artist', width: 80 },
+                    { name: 'duration', width: 50 }, { name: 'album', width: 100 }],
             playing : null,
             loop    : global.LOOP.ListLoop,
             config  : global.default,
-            theme   : global.default.theme
+            theme   : global.default.theme,
+            indialog: false,
+            nyan    : null
         };
     },
-    components: { FileList, PlayList, Property, Lyric, Cover, Controller, User },
+    components: { FileList, PlayList, Property, Lyric, Cover, Controller, User, PromptWindow },
     template:
     `
-    <div id="chiyosekai" :style="{ height: '100%', width: '100%', background: config.theme.global.background }">
-        <div id="chiyo-left">
-            <FileList ref="filelist" :files="files" v-on:addMusic="addMusic" :theme="theme.filelist"></FileList>
-            <div class="leftbottom">
-                <div class="chiyo-left">
-                    <User :theme="config.theme.user"></User>
-                    <Cover ref="cover" :theme="config.theme.cover"></Cover>
-                </div>
-                <div class="chiyo-right">
-                    <Property ref="property" :config="config.theme.property"></Property>
+    <div style="height:100%; width: 100%">
+        <div id="chiyosekai" :style="{ height: '100%', width: '100%', background: config.theme.global.background }">
+            <div id="chiyo-left">
+                <FileList ref="filelist" :files="files" v-on:addMusic="addMusic" :theme="theme.filelist"></FileList>
+                <div class="leftbottom">
+                    <div class="chiyo-left">
+                        <User :theme="config.theme.user"></User>
+                        <Cover ref="cover" :theme="config.theme.cover"></Cover>
+                    </div>
+                    <div class="chiyo-right">
+                        <Property ref="property" :config="config.theme.property"></Property>
+                    </div>
                 </div>
             </div>
+            <div id="center">
+                <Controller ref="controller" :playing="playing" :lists="lists" :theme="theme.controller"
+                    :curlist="curlist" :list="curlist" @playMusic="playMusic" @deleteList="deleteList"
+                    @saveList="saveList" @addList="addList" @openFolder="openFolder" @next="nextMusic">
+                </Controller>
+                <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist"
+                    :theme="config.theme.playlist" :config="config.config" v-on:choose="chooseMusic"
+                    v-on:playMusic="playMusic" v-on:switchList="switchList"></PlayList>
+            </div>
+            <div id="right">
+                <Lyric ref="lyric"></Lyric>
+            </div>
         </div>
-        <div id="center">
-            <Controller ref="controller" :playing="playing" :lists="lists" :theme="theme.controller"
-                :curlist="curlist" :list="curlist" v-on:playMusic="playMusic"></Controller>
-            <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist"
-                :theme="config.theme.playlist" :config="config.config" v-on:choose="chooseMusic"
-                v-on:playMusic="playMusic" v-on:switchList="switchList"></PlayList>
-        </div>
-        <div id="right">
-            <Lyric ref="lyric"></Lyric>
-        </div>
+        <PromptWindow @nyan="nyanInited"></PromptWindow>
     </div>
     `,
     methods: {
@@ -45,7 +53,43 @@ global.ChiyoSekai = Vue.extend({
             this.lists[this.curlist].content.push(music);
         },
         chooseMusic(index) {
-
+        },
+        deleteList() {
+            this.nyan('ask', this.i18n('deleteList', this.lists[this.curlist].name), null, {
+                'confirm': () => {
+                    const list = this.lists[this.curlist];
+                    this.lists.splice(this.curlist);
+                    if (this.curlist > 1)
+                        this.curlist = this.curlist - 1;
+                    else
+                        this.addList();
+                    require('fs').rename(`data/playlist/${list.file}`, `data/playlist/${list.file}.deleted`, console.log);
+                },
+                'cancel' : () => {}
+            }, null);
+        },
+        nyanInited(nyan) {
+            this.nyan = nyan;
+        },
+        openFolder() {
+            const dialog = require('electron').remote.dialog;
+            dialog.showOpenDialog({
+                properties: ['openDirectory']
+            }, folder => {
+                if (!folder) return;
+                const files = global.getFileList(folder[0], ['mp3', 'm4a', 'aac', 'ogg', 'wav', 'lac', 'tak', 'ape'])
+                .map(file => ({
+                    name: file.slice(file.lastIndexOf('\\') + 1, file.lastIndexOf('.')),
+                    url: file
+                }));
+                this.files = [];
+                files.map(file => {
+                    global.getInfo(file, () => {
+                        file.name = file.title || file.name;
+                        this.files.push(file);
+                    });
+                });
+            });
         },
         nextMusic() {
             let listLength = this.lists[this.curlist].content.length;
@@ -71,11 +115,11 @@ global.ChiyoSekai = Vue.extend({
                 index = this.lists[this.curlist].content.length - 1;
             this.playing = index;
             this.$refs.controller.playMusic(this.curlist, index);
-            let curMusic  = this.lists[this.curlist].content[index];
+            let curMusic = this.lists[this.curlist].content[index];
             if (!curMusic.info)
-                this.getInfo(curMusic, info => this.$refs.cover.setImgUrl(info.cover));
+                global.getInfo(curMusic, music => this.$refs.cover.setImgUrl(music.cover));
             else
-                this.$refs.cover.setImgUrl(curMusic.info.cover);
+                this.$refs.cover.setImgUrl(curMusic.cover);
         },
         switchList(index) {
             this.curlist = index;
@@ -83,37 +127,41 @@ global.ChiyoSekai = Vue.extend({
         loadFiles(files) {
             this.files = files;
         },
+        addList () {
+            let newListNames = null;
+            for (let i = 0; i < 99; ++i)
+                if (!this.lists.map(list => list.name).includes(`newPlaylist-${i}`)) {
+                    newListNames = `newPlaylist-${i}`;
+                    break;
+                }
+            this.lists.push({ name: newListNames, user: global.user,
+                file: `${newListNames}@${global.user}.json`, content: [] });
+            this.switchList(this.lists.length - 1);
+            this.saveList();
+        },
         loadList(list) {
-            this.lists = list;
+            if (!this.lists || (this.lists && this.lists[0].name === 'sekai') ) this.lists = [];
+            this.lists.push(list);
+        },
+        saveList() {
+            const fs = require('fs');
+            const list = this.lists[this.curlist];
+            const originFile = list.file;
+            list.file = `${list.name}@${list.user}.json`;
+            fs.writeFile(`data/playlist/${originFile}`, JSON.stringify(list, null, 4), err => {
+                if (err) console.error(err);
+                if (originFile !== list.file)
+                    fs.rename(`data/playlist/${originFile}`, `data/playlist/${list.file}`, console.log);
+                console.log('保存成功');
+            });
         },
         loadConfig(userConfig) {
             this.$refs.controller.loadConfig(userConfig.theme.toolbar);
         },
-        getInfo(music, callback) {
-            music.info = {
-                artist: null,
-                cover    : null,
-                length: 0,
-            };
-            if (music.url.toLowerCase().startsWith('http') || music.url.toLowerCase().startsWith('ftp') ) {
-                // deal with web file
-                global.jsmediatags.read(music.url, {
-                    onSuccess: tag => {
-                        music.info.cover = URL.createObjectURL(new Blob([Uint8Array.from(tag.tags.picture.data)], { type: tag.tags.picture.format }));
-                        callback(music.info);
-                    },
-                    onError: err => console.log(err)
-                });
-            } else {
-                // deal with local file(electron only)
-                if (!(global.require && global.require('music-metadata')))
-                    return console.log('Local files are allowed only on electron(desktop).');
-                const tagReader = require('music-metadata');
-                tagReader.parseFile(music.url).then( info => {
-                    music.info.cover = URL.createObjectURL(new Blob([Uint8Array.from(info.common.picture[0].data)], { type: info.common.picture[0].format })),
-                    callback(music.info);
-                }).catch(err => console.log(err));
-            }
-        },
+        i18n(key, extra) {
+            return {
+                deleteList: { zh_CN: `确定要删除播放列表: ${extra}吗`, en: `Are you sure to delete playlist: ${extra}` }
+            }[key][global.locale];
+        }
     }
 });

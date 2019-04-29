@@ -13,13 +13,13 @@ global.Controller = Vue.extend({
             <source ref="source" id="player" src>
         </audio>
         <div id="toolbar" :style="{ height: theme.height + 'px', padding : '2px' }">
-            <div v-for="button in Object.keys(theme.buttons)" class="toolbtn"
-            :style="{ background: theme.buttons[button].icon,
+            <div v-for="button in theme.buttons" class="toolbtn"
+            :style="{ backgroundImage: button.icon,
                 width: theme.buttonWidth + 'px',
                 height: theme.buttonHeight + 'px',
                 'background-size': 'cover',
                 margin: marginV + 'px ' + theme.buttonIndent + 'px ' + marginV + 'px ' + theme.buttonIndent + 'px'}"
-                @click="btnHandler(button)" :title="text(button)">
+                @click="btnHandler(button.name)" :title="text(button.name)">
             </div>
         </div>
         <div id="volumnBar"></div>
@@ -46,6 +46,17 @@ global.Controller = Vue.extend({
                     return this.pause();
                 case 'random':
                     return this.$emit('playMusic', Math.floor(Math.random() * this.lists[this.curlist].content.length + 0.5));
+                case 'add':
+                    return this.$emit('addList');
+                case 'save':
+                    return this.$emit('saveList');
+                case 'open':
+                    return this.$emit('openFolder');
+                case 'delete':
+                    return this.$emit('deleteList');
+                case 'split':
+                default:
+                    break;
             }
         },
         playMusic(curlist, index) {
@@ -90,12 +101,17 @@ global.Controller = Vue.extend({
         },
         text(key) {
             return {
+                open   : { zh_CN: '打开目录',   en: 'Open Folder' },
+                add    : { zh_CN: '添加播放列表',   en: 'Add Playlist' },
                 play   : { zh_CN: '播放',   en: 'Play'  },
                 next   : { zh_CN: '下一曲', en: 'Next'  },
                 stop   : { zh_CN: '停止',   en: 'Stop'  },
                 pause  : { zh_CN: '暂停',   en: 'Pause' },
                 last   : { zh_CN: '上一首', en: 'Last'  },
-                random : { zh_CN: '随机',  en: 'Random' },
+                random : { zh_CN: '随机',   en: 'Random' },
+                save   : { zh_CN: '保存播放列表',  en: 'Save Playlist' },
+                split  : { zh_CN: '',       en: '' },
+                delete : { zh_CN: '删除播放列表', en: 'Delete Playlist' }
             }[key][global.locale];
         }
     }
