@@ -1,3 +1,9 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: '微软雅黑', sans-serif;
+}
+
 body {
   position: relative;
   margin: 0px; 
@@ -6,18 +12,54 @@ body {
 
 #chiyosekai {
   position: relative;
+  display: flex;
+  overflow: hidden;
 }
 
-#left {
-  float: left;
+.chiyo-left, .chiyo-right {
+  display: inline-block;
+}
+
+input {
+  font-family: '微软雅黑', sans-serif
+}
+
+#file-container {
+  height: calc(100% - 306px);
 }
 
 #filelist {
-  padding-top : 10px;
-  padding-left: 10px;
-  border: 1px solid #333333;
-  display: flex;
+  padding-top : 5px;
+  display: block;
   height: calc(100% - 38px);
+  overflow: auto;
+}
+
+#filelist>.file {
+  margin-left: 5px;
+}
+
+#filelist::-webkit-scrollbar {
+  width: 15px;
+}
+
+#filelist::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(88, 88, 88, 0.6);
+}
+
+.chiyo-height-fill {
+  height: -webkit-fill-available;
+  height: fill-available;
+}
+
+#filesearch {
+  width: 100%;
+  border: none;
+}
+
+#filesearch:focus {
+  outline-color: rgba(116, 175, 226, 0.9)
 }
 
 .file {
@@ -45,39 +87,46 @@ body {
 
 .filename {
   display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-#controller {
-  width: 400px;
+.nowrap {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .toolbtn {
   display: inline-block;
 }
 
-#viewer, #propertyWin {
+.toolbtn:hover {
+  opacity: 0.8;
+}
+
+#cover, #propertyWin {
   display: inline-block;
 }
 
 #center {
   display: inline-block;
+  width: calc(100% - 400px);
 }
 
 #playlist {
-  height: 640px;
-  border: 1px solid #333333;
-  width: 700px;
-}
-
-.tab {
-  display: table-cell;
-  padding-left: 20px;
-  padding-right: 20px;
+  height: calc(100% - 33px);
 }
 
 #list {
   height: 724px;
-  border: 1px solid #333333;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+#list td {
+  font-weight: 500;
 }
 
 .header {
@@ -87,21 +136,120 @@ body {
 
 table>thead {
   color: #ffffff;
-  background: #4aa0e9;
+  background: #1e3d56;
 }
 
 tr {
-  background: #8AF7F7;
+  background: #00000000;
 }
 
 tr:nth-of-type(odd) {
-  background: #F8F8F8;
+  background: rgba(50,50,50,0.9);
 }
 
 tr.activeMusic {
-  background: #22ae63;
+  background: #395647;
+}
+
+.tab {
+  display: table-cell;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .tab.active {
   background-color: #22ae63;
+}
+
+.tab.inactive {
+  color: #D4C380;
+  background: rgba(40, 40, 40, 0.9)
+}
+
+.noborder {
+  border: none;
+}
+
+#mask {
+  background-color: #233333;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+}
+
+#avatar {
+  border-radius: 1rem;
+}
+
+/* PromptWindow Style */
+:root {
+  --title-bg: rgba(26, 26, 26, 0.9);
+  --font-color: rgba(233, 233, 233, 0.9);
+  --font-family: "思源黑体", "微软雅黑";
+}
+
+#p-mask {
+  background-color: rgba(42, 52, 55);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(3px);
+  transition: opacity 0.5s ease-in;
+}
+
+#prompt-window > #body {
+  padding: 16px 10px 20px 10px;
+}
+
+#prompt-window {
+  width: 300px;
+  background-color: rgba(57, 65, 68, 0.9);
+  border-radius: 8px;
+  z-index: 955159879465;
+}
+
+#prompt-window > #header {
+  background-color: var(--title-bg);
+  color: var(--font-color);
+  font-size: 1.2rem;
+  height: 30px;
+  border-radius: 8px 8px 0 0;
+  padding: 5px 8px;
+  text-align: center;
+}
+
+#prompt-window #text {
+  color: var(--font-color);
+  font-size: 1.1rem;
+  text-indent: 2em;
+}
+
+#prompt-window #footer {
+  margin-top: 30px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+#prompt-window button {
+  background-color: #111;
+  border: none;
+  border-radius: 5px;
+  color: var(--font-color);
+  font-size: 1.1rem;
+  padding: 5px 16px;
+  margin-left: 10px;
+  font-family: var(--font-family);
+}
+
+#prompt-window button:hover {
+  background-color: rgba(36, 36, 36, 0.9);
+  transition: background-color 0.3s ease-in;
 }
