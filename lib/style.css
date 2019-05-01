@@ -125,29 +125,26 @@ input {
   text-align: center;
 }
 
-#list td {
-  font-weight: 500;
-}
-
 .header {
   padding-left: 20px;
   padding-right: 20px;
 }
 
-table>thead {
+#list>thead {
   color: #ffffff;
   background: #1e3d56;
 }
 
-tr {
+#list tr {
   background: #00000000;
+  display: table-row;
 }
 
-tr:nth-of-type(odd) {
+#list tr:nth-of-type(odd) {
   background: rgba(50,50,50,0.9);
 }
 
-tr.activeMusic {
+#list tr.activeMusic {
   background: #395647;
 }
 
@@ -164,6 +161,14 @@ tr.activeMusic {
 .tab.inactive {
   color: #D4C380;
   background: rgba(40, 40, 40, 0.9)
+}
+
+td.statusColumn {
+  display: inline-grid;
+}
+
+img.status-img {
+  width: 18px;
 }
 
 .noborder {

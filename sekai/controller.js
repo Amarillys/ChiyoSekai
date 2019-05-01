@@ -80,14 +80,20 @@ global.Controller = Vue.extend({
         },
         pause() {
             if (this.working) {
-                if (this.$refs.control.paused)
+                if (this.$refs.control.paused) {
+                    this.$emit('resume');
                     return this.$refs.control.play();
+                }
+                this.$emit('pause');
                 this.$refs.control.pause();
             }
         },
         stop() {
-            if (this.working)
-                this.$refs.control.stop();
+            if (this.working) {
+                this.$refs.control.pause();
+                this.$refs.control.currentTime = 0;
+                this.$emit('stop');
+            }
         },
         play() {
             if (this.playing === null)

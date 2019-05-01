@@ -1,17 +1,5 @@
 /* config: auto load info of files */
 /* eslint-env browser */
-/* global Vue */
-global.locale = 'zh_CN';
-global.user   = 'chiyo';
-global.getFileList = require('./lib/getFileList');
-/* https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
-global.uuid = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-};
-
 global.init = function (chiyosekai) {
     /* loading local config.json, check if online logined */
     const fs = require('fs');
@@ -72,7 +60,7 @@ global.getInfo = function(music, callback) {
                 format:     info.format.dataformat,
                 bitrate:    info.format.bitrate,
                 sampleRate: info.format.sampleRate,
-                duration:   `${Math.floor(info.format.duration / 60)}:${Math.floor(info.format.duration % 60)}`
+                duration:   `${Math.floor(info.format.duration / 60)}:${ ('0' + Math.floor(info.format.duration % 60)).slice(-2) }`
             });
             callback(music);
         }).catch(err => console.log(err));

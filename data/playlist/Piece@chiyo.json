@@ -14,7 +14,7 @@
             "format": "flac",
             "bitrate": 1120520.521606701,
             "sampleRate": 44100,
-            "duration": "7:0"
+            "duration": "7:00"
         },
         {
             "name": "タイド・コラプション",
@@ -40,7 +40,7 @@
             "format": "flac",
             "bitrate": 942971.6782559669,
             "sampleRate": 44100,
-            "duration": "7:5"
+            "duration": "7:05"
         },
         {
             "name": "A transient faith",
@@ -134,13 +134,6 @@
             "duration": "6:39"
         },
         {
-            "name": "PI30A",
-            "url": "B:\\Music\\可移动磁盘\\GAME\\PI30A.mp3",
-            "artist": null,
-            "cover": null,
-            "length": 0
-        },
-        {
             "name": "Dual Sight",
             "url": "D:\\【魊妖】Dual Sight WAV\\01.Dual Sight.wav",
             "artist": "G.K",
@@ -150,7 +143,7 @@
             "format": "WAVE/PCM",
             "bitrate": 352800,
             "sampleRate": 44100,
-            "duration": "7:3"
+            "duration": "7:03"
         },
         {
             "name": "Liberator",
@@ -162,7 +155,7 @@
             "format": "WAVE/PCM",
             "bitrate": 352800,
             "sampleRate": 44100,
-            "duration": "7:5"
+            "duration": "7:05"
         }
     ]
 }

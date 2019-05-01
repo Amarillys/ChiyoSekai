@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "electron": "^4.0.4",
-    "music-metadata": "^3.5.1"
+    "music-metadata": "^3.5.1",
+    "vuedraggable": "^2.20.0"
   }
 }

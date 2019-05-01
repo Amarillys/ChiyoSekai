@@ -8,6 +8,7 @@ global.ChiyoSekai = Vue.extend({
             listview: [{ name: 'name', width: 150 }, { name: 'artist', width: 80 },
                     { name: 'duration', width: 50 }, { name: 'album', width: 100 }],
             playing : null,
+            status  : null,
             loop    : global.LOOP.ListLoop,
             config  : global.default,
             theme   : global.default.theme,
@@ -33,12 +34,12 @@ global.ChiyoSekai = Vue.extend({
                 </div>
             </div>
             <div id="center">
-                <Controller ref="controller" :playing="playing" :lists="lists" :theme="theme.controller"
-                    :curlist="curlist" :list="curlist" @playMusic="playMusic" @deleteList="deleteList"
-                    @saveList="saveList" @addList="addList" @openFolder="openFolder" @next="nextMusic">
+                <Controller ref="controller" :playing="playing" :lists="lists" :theme="theme.controller" @resume="resumeMusic"
+                    :curlist="curlist" :list="curlist" @playMusic="playMusic" @deleteList="deleteList" @pause="pauseMusic"
+                    @saveList="saveList" @addList="addList" @openFolder="openFolder" @next="nextMusic" @stop="stopMusic">
                 </Controller>
-                <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist"
-                    :theme="config.theme.playlist" :config="config.config" v-on:choose="chooseMusic"
+                <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist" :status="status"
+                    :theme="config.theme.playlist" :config="config.config" v-on:choose="chooseMusic" :playing="playing"
                     v-on:playMusic="playMusic" v-on:switchList="switchList"></PlayList>
             </div>
             <div id="right">
@@ -51,6 +52,15 @@ global.ChiyoSekai = Vue.extend({
     methods: {
         addMusic(music) {
             this.lists[this.curlist].content.push(music);
+        },
+        pauseMusic() {
+            this.status = 'pause';
+        },
+        resumeMusic() {
+            this.status = 'playing';
+        },
+        stopMusic() {
+            this.status = null;
         },
         chooseMusic(index) {
         },
@@ -93,6 +103,7 @@ global.ChiyoSekai = Vue.extend({
         },
         nextMusic() {
             let listLength = this.lists[this.curlist].content.length;
+            this.status = null;
             switch (this.loop) {
                 case global.LOOP.ListLoop:
                     return this.playMusic(this.playing + 1 >= listLength ? 0 : this.playing + 1);
@@ -108,7 +119,7 @@ global.ChiyoSekai = Vue.extend({
         },
         playMusic(index) {
             if (this.lists[this.curlist].content.length === 0)
-                return;
+                return (this.status = null);
             if (index >= this.lists[this.curlist].content.length)
                 index = 0;
             if (index < 0)
@@ -116,6 +127,7 @@ global.ChiyoSekai = Vue.extend({
             this.playing = index;
             this.$refs.controller.playMusic(this.curlist, index);
             let curMusic = this.lists[this.curlist].content[index];
+            this.status = 'playing';
             if (!curMusic.info)
                 global.getInfo(curMusic, music => this.$refs.cover.setImgUrl(music.cover));
             else

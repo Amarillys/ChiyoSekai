@@ -3,10 +3,11 @@ global.PlayList = Vue.extend({
         return {
             editable: null,
             active: null,
-            tabFocus: false
+            tabFocus: false,
+            statusLocation: 2
         };
     },
-    props: ['lists', 'curlist', 'display', 'theme', 'config'],
+    props: ['lists', 'curlist', 'display', 'theme', 'config', 'playing', 'status'],
     template: `
         <div id="playlist" class="chiyo-height-fill" :style="{ background: theme.background }">
             <div id="tablist">
@@ -22,17 +23,26 @@ global.PlayList = Vue.extend({
                 color : config.fontColor
             }">
                 <thead>
-                    <th class="header" v-for="header in display"
+                    <th class="header" v-for="header in addStatus()"
                         :style="{ width: header.width > 0 ? header.width + 'px' : 'auto' }">
                         {{ text(header.name) }}
                     </th>
                 </thead>
-                <tr v-for="music, index in lists[curlist].content" @dblclick="$emit('playMusic', index)"
-                    :class="{ activeMusic: index == active }" @click="active = index">
-                    <td v-for="header in display" class="nowrap" :title="music[header.name]">
-                        {{ music[header.name] }}
-                    </td>
-                </tr>
+                <draggable v-model="lists[curlist].content" tag="tbody">
+                    <tr v-for="(music, index) in lists[curlist].content" @dblclick="$emit('playMusic', index)"
+                        :class="{ activeMusic: index == active, musicRow: true }" @click="active = index" :key="index">
+                        <td v-for="header in display.slice(0, statusLocation)" class="nowrap" :title="music[header.name]">
+                            {{ music[header.name] }}
+                        </td>
+                        <td class="statusColumn">
+                            <img v-if="index == playing && status !== null" class="status-img"
+                                :src="status == 'playing' ? './img/play.svg' : './img/pause.svg'"></img>
+                        </td>
+                        <td v-for="header in display.slice(statusLocation)" class="nowrap" :title="music[header.name]">
+                            {{ music[header.name] }}
+                        </td>
+                    </tr>
+                </draggable>
             </table>
         </div>
     `,
@@ -43,13 +53,19 @@ global.PlayList = Vue.extend({
         deleteMusic() {
 
         },
+        addStatus() {
+            let arr = this.display.slice();
+            arr.splice(this.statusLocation, 0, { name: 'status', width: 50 });
+            return arr;
+        },
         text(key) {
             return {
                 album   : { zh_CN: '专辑', en: 'Album' },
                 name    : { zh_CN: '音乐名', en: 'Music Name' },
                 artist  : { zh_CN: '艺术家', en: 'Artist' },
                 url     : { zh_CN: '来源网址', en: 'Source URL' },
-                duration: { zh_CN: '时长', en: 'Length' }
+                duration: { zh_CN: '时长', en: 'Length' },
+                status  : { zh_CN: '状态', en: 'Status' }
             }[key][global.locale];
         }
     },
