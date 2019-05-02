@@ -35,8 +35,8 @@ global.PlayList = Vue.extend({
                             {{ music[header.name] }}
                         </td>
                         <td class="statusColumn">
-                            <img v-if="index == playing && status !== null" class="status-img"
-                                :src="status == 'playing' ? './img/play.svg' : './img/pause.svg'"></img>
+                            <img v-if="(index == playing && status !== null) || (lists[curlist].content[index].invalid)" class="status-img"
+                                :src="setStatusImg(index)"></img>
                         </td>
                         <td v-for="header in display.slice(statusLocation)" class="nowrap" :title="music[header.name]">
                             {{ music[header.name] }}
@@ -47,11 +47,15 @@ global.PlayList = Vue.extend({
         </div>
     `,
     methods: {
+        setStatusImg(index) {
+            if (this.lists[this.curlist].content[index].invalid)
+                return './img/remove.svg';
+            if (this.status === 'playing')
+                return './img/play.svg';
+            return './img/pause.svg';
+        },
         switchList(index) {
             this.$emit('switchList', index);
-        },
-        deleteMusic() {
-
         },
         addStatus() {
             let arr = this.display.slice();

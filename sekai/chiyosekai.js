@@ -22,7 +22,7 @@ global.ChiyoSekai = Vue.extend({
     <div style="height:100%; width: 100%">
         <div id="chiyosekai" :style="{ height: '100%', width: '100%', background: config.theme.global.background }">
             <div id="chiyo-left">
-                <FileList ref="filelist" :files="files" v-on:addMusic="addMusic" :theme="theme.filelist"></FileList>
+                <FileList ref="filelist" :files="files" @addMusic="addMusic" :theme="theme.filelist"></FileList>
                 <div class="leftbottom">
                     <div class="chiyo-left">
                         <User :theme="config.theme.user"></User>
@@ -34,13 +34,16 @@ global.ChiyoSekai = Vue.extend({
                 </div>
             </div>
             <div id="center">
-                <Controller ref="controller" :playing="playing" :lists="lists" :theme="theme.controller" @resume="resumeMusic"
-                    :curlist="curlist" :list="curlist" @playMusic="playMusic" @deleteList="deleteList" @pause="pauseMusic"
-                    @saveList="saveList" @addList="addList" @openFolder="openFolder" @next="nextMusic" @stop="stopMusic">
+                <Controller ref="controller" :playing="playing"  :lists="lists" :theme="theme.controller"
+                          :curlist="curlist" :list="curlist"     :nyan="nyan"   :config="config.config"
+                    @pause="pauseMusic"    @addList="addList"    @stop="stopMusic"
+                    @playMusic="playMusic" @resume="resumeMusic" @deleteList="deleteList"
+                    @saveList="saveList"   @remove="removeMusic" @next="nextMusic" @openFolder="openFolder" >
                 </Controller>
                 <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist" :status="status"
-                    :theme="config.theme.playlist" :config="config.config" v-on:choose="chooseMusic" :playing="playing"
-                    v-on:playMusic="playMusic" v-on:switchList="switchList"></PlayList>
+                    :theme="config.theme.playlist" :config="config.config" :playing="playing"
+                    @playMusic="playMusic" @switchList="switchList" @choose="chooseMusic">
+                </PlayList>
             </div>
             <div id="right">
                 <Lyric ref="lyric"></Lyric>
@@ -63,6 +66,17 @@ global.ChiyoSekai = Vue.extend({
             this.status = null;
         },
         chooseMusic(index) {
+        },
+        removeMusic() {
+            let list = this.lists[this.curlist].content;
+            let target = this.$refs.playlist.active;
+            this.nyan('ask', this.i18n('deleteMusic', list[target].name), null, {
+                'confirm': () => {
+                    list.splice(target, 1);
+                    this.saveList();
+                },
+                'cancel' : () => {}
+            }, null);
         },
         deleteList() {
             this.nyan('ask', this.i18n('deleteList', this.lists[this.curlist].name), null, {
@@ -172,7 +186,8 @@ global.ChiyoSekai = Vue.extend({
         },
         i18n(key, extra) {
             return {
-                deleteList: { zh_CN: `确定要删除播放列表: ${extra}吗`, en: `Are you sure to delete playlist: ${extra}` }
+                deleteList: { zh_CN: `确定要删除播放列表: ${extra} 吗？`, en: `Are you sure to delete playlist: ${extra} ?` },
+                deleteMusic: { zh_CN: `确定要从播放列表移除曲子: ${extra} 吗？`, en: `Are you sure to remove music: ${extra} from playlist?` }
             }[key][global.locale];
         }
     }

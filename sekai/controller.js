@@ -1,5 +1,5 @@
 global.Controller = Vue.extend({
-    props: ['curlist', 'lists', 'playing', 'toolbar', 'theme'],
+    props: ['curlist', 'lists', 'playing', 'toolbar', 'theme', 'nyan'],
     data() {
         return {
             config: null,
@@ -19,7 +19,7 @@ global.Controller = Vue.extend({
                 height: theme.buttonHeight + 'px',
                 'background-size': 'cover',
                 margin: marginV + 'px ' + theme.buttonIndent + 'px ' + marginV + 'px ' + theme.buttonIndent + 'px'}"
-                @click="btnHandler(button.name)" :title="text(button.name)">
+                @click="btnHandler(button.name)" :title="i18n(button.name)">
             </div>
         </div>
         <div id="volumnBar"></div>
@@ -39,13 +39,15 @@ global.Controller = Vue.extend({
                 case 'stop':
                     return this.stop();
                 case 'next':
-                    return this.$emit('playMusic', this.playing + 1);
+                    return this.$emit('next');
                 case 'last':
                     return this.$emit('playMusic', this.playing - 1);
                 case 'pause':
                     return this.pause();
                 case 'random':
                     return this.$emit('playMusic', Math.floor(Math.random() * this.lists[this.curlist].content.length + 0.5));
+                case 'remove':
+                    return this.$emit('remove');
                 case 'add':
                     return this.$emit('addList');
                 case 'save':
@@ -60,19 +62,22 @@ global.Controller = Vue.extend({
             }
         },
         playMusic(curlist, index) {
+            let music = this.lists[curlist].content[index];
             if (index === this.playing)
                 return (this.$refs.control.load(), this.play());
-            fetch(this.lists[curlist].content[index].url, { headers: { Range: "bytes=0-1" } })
+            fetch(music.url, { headers: { Range: "bytes=0-1" } })
             .then( () => {
                 this.working = true;
-                this.$refs.source.setAttribute('src', this.lists[curlist].content[index].url);
+                this.$refs.source.setAttribute('src', music.url);
                 this.$refs.control.load();
                 this.play();
             })
-            .catch( err => {
+            .catch( () => {
                 this.working = false;
                 this.$refs.source.setAttribute('src', null);
-                console.log(err);
+                music.invalid = true;
+                this.$emit('next');
+                this.nyan('info', this.i18n('error') + music.name);
             });
         },
         loadConfig(userConfig) {
@@ -105,7 +110,7 @@ global.Controller = Vue.extend({
             if (this.working)
                 this.$refs.control.paused ? this.play() : this.pause();
         },
-        text(key) {
+        i18n(key) {
             return {
                 open   : { zh_CN: '打开目录',   en: 'Open Folder' },
                 add    : { zh_CN: '添加播放列表',   en: 'Add Playlist' },
@@ -115,9 +120,11 @@ global.Controller = Vue.extend({
                 pause  : { zh_CN: '暂停',   en: 'Pause' },
                 last   : { zh_CN: '上一首', en: 'Last'  },
                 random : { zh_CN: '随机',   en: 'Random' },
+                remove : { zh_CN: '移除该曲', en: 'Remove this music' },
                 save   : { zh_CN: '保存播放列表',  en: 'Save Playlist' },
                 split  : { zh_CN: '',       en: '' },
-                delete : { zh_CN: '删除播放列表', en: 'Delete Playlist' }
+                delete : { zh_CN: '删除播放列表', en: 'Delete Playlist' },
+                error  : { zh_CN: '无法播放歌曲：', en: 'Cannot play music: ' }
             }[key][global.locale];
         }
     }

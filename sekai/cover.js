@@ -2,7 +2,7 @@ global.Cover = Vue.extend({
     props: ['theme', 'config'],
     data() {
         return {
-            url: null
+            url: './img/music.svg'
         };
     },
     template:
@@ -17,7 +17,7 @@ global.Cover = Vue.extend({
     `,
     methods: {
         setImgUrl(url) {
-            this.url = url;
+            this.url = url || './img/music.svg';
         }
     }
 });

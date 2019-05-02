@@ -71,6 +71,12 @@ global.default = {
             }, {
                 name: "random",
                 icon: "url(./img/random.svg)",
+            },  {
+                name: "split",
+                icon: "url(./img/split.svg)",
+            }, {
+                name: "remove",
+                icon: "url(./img/remove.svg)",
             }, {
                 name: "split",
                 icon: "url(./img/split.svg)",

@@ -43,6 +43,7 @@ global.PromptWindow = Vue.extend({
     },
     methods: {
         invoke(type, text, title, callback, params) {
+            if (this.active)
             this.title    = title || this.title;
             this.text     = text  || this.text;
             this.type     = type  || 'info';
