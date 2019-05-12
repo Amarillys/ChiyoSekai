@@ -1,3 +1,10 @@
+/* PromptWindow Style */
+:root {
+  --title-bg: rgba(26, 26, 26, 0.9);
+  --font-color: rgb(212, 195, 128, 0.95);
+  --font-family: "思源黑体", "微软雅黑";
+}
+
 html, body {
   height: 100%;
   width: 100%;
@@ -17,7 +24,13 @@ body {
 }
 
 .chiyo-left, .chiyo-right {
-  display: inline-block;
+  display: table-footer-group;
+  height: 300px;
+  display: grid;
+}
+
+.leftbottom {
+  display: flex;
 }
 
 input {
@@ -25,32 +38,18 @@ input {
 }
 
 #file-container {
-  height: calc(100% - 306px);
+  height: calc(100% - 300px);
 }
 
 #filelist {
   padding-top : 5px;
   display: block;
-  height: calc(100% - 38px);
+  height: calc(100% - 39px);
   overflow: auto;
 }
 
 #filelist>.file {
   margin-left: 5px;
-}
-
-#filelist::-webkit-scrollbar {
-  width: 15px;
-}
-
-#filelist::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: rgba(88, 88, 88, 0.6);
-}
-
-.chiyo-height-fill {
-  height: -webkit-fill-available;
-  height: fill-available;
 }
 
 #filesearch {
@@ -84,6 +83,10 @@ input {
 .music {
   content: url(../img/music.svg)
 }
+.musicRow {
+  height: 27px;
+  padding: 0;
+}
 
 .filename {
   display: block;
@@ -98,8 +101,13 @@ input {
   overflow: hidden;
 }
 
+#toolbar {
+  display: flex;
+  width: 100%;
+}
+
 .toolbtn {
-  display: inline-block;
+  flex-shrink: 0;
 }
 
 .toolbtn:hover {
@@ -108,21 +116,38 @@ input {
 
 #cover, #propertyWin {
   display: inline-block;
+  box-sizing: border-box;
+  -webkit-app-region: drag;
 }
 
 #center {
-  display: inline-block;
-  width: calc(100% - 400px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: calc(100% - 300px);
 }
 
 #playlist {
-  height: calc(100% - 33px);
+  height: auto;
+  overflow: auto;
+  text-align: center;
 }
 
 #list {
-  height: 724px;
-  border-collapse: collapse;
-  text-align: center;
+  width: 100%;
+}
+
+#list th{
+  position: sticky;
+  top: 26px;
+  background: #1e3d56;
+}
+
+#tablist {
+  width: 100%;
+  background-color: rgba(40, 40, 40, 1.0);
+  position: sticky;
+  top: 0;
 }
 
 .header {
@@ -136,16 +161,16 @@ input {
 }
 
 #list tr {
-  background: #00000000;
+  background:rgba(50,50,50,0.9);
   display: table-row;
 }
 
 #list tr:nth-of-type(odd) {
-  background: rgba(50,50,50,0.9);
+  background: rgba(0, 0, 0, 0);
 }
 
 #list tr.activeMusic {
-  background: #395647;
+  background-color: #395647;
 }
 
 .tab {
@@ -163,8 +188,13 @@ input {
   background: rgba(40, 40, 40, 0.9)
 }
 
+td {
+  height: 27px;
+  table-layout: fixed;
+  padding: 0;
+}
 td.statusColumn {
-  display: inline-grid;
+  display: inline-flex;
 }
 
 img.status-img {
@@ -189,13 +219,6 @@ img.status-img {
   border-radius: 1rem;
 }
 
-/* PromptWindow Style */
-:root {
-  --title-bg: rgba(26, 26, 26, 0.9);
-  --font-color: rgba(233, 233, 233, 0.9);
-  --font-family: "思源黑体", "微软雅黑";
-}
-
 #p-mask {
   background-color: rgba(42, 52, 55);
   height: 100%;
@@ -203,11 +226,14 @@ img.status-img {
   position: fixed;
   top: 0;
   left: 0;
+  backdrop-filter: blur(3px);
+  transition: opacity 0.5s ease-in;
+}
+
+.flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(3px);
-  transition: opacity 0.5s ease-in;
 }
 
 #prompt-window > #body {
@@ -257,4 +283,19 @@ img.status-img {
 #prompt-window button:hover {
   background-color: rgba(36, 36, 36, 0.9);
   transition: background-color 0.3s ease-in;
+}
+
+.flex-fixed {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.flex-auto {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+#username {
+  color: var(--font-color);
+  text-align: center;
 }

@@ -7,6 +7,12 @@ On source code mode, you need a node.js. And Run these commands:
 
 `npm start`
 
+## V0.2.0
+
++ remove user panel and perporty(temporarily)
++ add progress bar and volume bar
++ redesign some ui with flex css
+
 ## V0.1.2
 
 + add remove music[button] from playlist

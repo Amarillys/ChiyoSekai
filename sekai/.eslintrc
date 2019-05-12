@@ -13,6 +13,7 @@
         "User": true,
         "Lyric": true,
         "Uint8Array": true,
-        "PromptWindow": true
+        "PromptWindow": true,
+        "StatusBar": true
     }
 }

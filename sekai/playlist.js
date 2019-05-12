@@ -9,7 +9,7 @@ global.PlayList = Vue.extend({
     },
     props: ['lists', 'curlist', 'display', 'theme', 'config', 'playing', 'status'],
     template: `
-        <div id="playlist" class="chiyo-height-fill" :style="{ background: theme.background }">
+        <div id="playlist" class="chiyo-height-fill flex-auto" :style="{ background: theme.background }">
             <div id="tablist">
                 <input v-for="list, index in lists" class="tab" @click="switchList(index)"
                     :style="{ height: theme.tab.height + 'px', fontSize: theme.tab.fontSize,
@@ -19,8 +19,7 @@ global.PlayList = Vue.extend({
                 </input>
             </div>
             <table id="list" :style="{
-                height: lists[curlist].content.length * 30 + 'px',
-                color : config.fontColor
+                color : config.fontColor, borderCollapse: 'collapse', tableLayout: 'fixed'
             }">
                 <thead>
                     <th class="header" v-for="header in addStatus()"

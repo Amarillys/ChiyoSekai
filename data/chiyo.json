@@ -3,7 +3,8 @@
     "passwd": "",
     "config": {
         "playList": ["Amarillys@Pure", "Amarillys@Empty"],
-        "loopMode": "0"
+        "loopMode": "0",
+        "lastOpenFolder": null
     },
     "theme" : {
         "toolbar" : {
@@ -29,7 +30,7 @@
                     "icon": "./data/img/random.svg"
                 }
             },
-            "volumnbar" : {
+            "volumebar" : {
                 "width": 120
             },
             "timebar": {

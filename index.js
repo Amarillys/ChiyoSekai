@@ -2,12 +2,14 @@ const { app, BrowserWindow } = require('electron');
 
 function createWindow () {
     const win = new BrowserWindow({
-        width: 1140,
-        height: 664,
+        width: 1024,
+        height: 632,
+        frame: false,
         webPreferences: {
             nodeIntegration: true,
             webSecurity: true,
-            experimentalFeatures: true
+            experimentalFeatures: true,
+            enableBlinkFeatures: 'OverlayScrollbars'
         },
         contentSecurityPolicy: `
             script-src 'self' 'https://unpkg.com' 'https://misuzu.moe';

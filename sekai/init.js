@@ -5,6 +5,7 @@ global.eval = function () {
 
 global.locale = 'zh_CN';
 global.user   = 'chiyo';
+global.document = document;
 global.getFileList = require('./lib/getFileList');
 global.draggable = Vue.extend(require('vuedraggable'));
 /* https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
@@ -16,28 +17,30 @@ global.uuid = () => {
 };
 
 global.LOOP = {
-    ListLoop: 0,
-    ListOnce: 1,
-    OneLoop : 2,
-    OneOnce : 3,
-    Random  : 4
+    listloop: 0,
+    listonce: 1,
+    oneloop : 2,
+    once    : 3,
+    random  : 4
 };
 
 global.default = {
     "userid": "Guest",
     "passwd": "",
     "config": {
-        "width"   : 400,
+        "width"   : 300,
+        "windowWidth": 1024,
         "playList": ["Guest@Empty"],
         "loopMode": "0",
-        "fontColor" : "#D4C380",
-        "fontFamily": "\"Source Han Sans SC\", sans-serif"
+        "fontColor" : "rgb(212, 195, 128)",
+        "fontFamily": "\"Source Han Sans SC\", sans-serif",
+        "stopAfterRemove": true
     },
     "theme" : {
         "cover": {
-            "background": "rgba(40, 40, 40, 0.9)",
-            "height": 200,
-            "width" : 200
+            "background": "rgba(30, 30, 30, 0.9)",
+            "height": 300,
+            "width" : 300
         },
         "controller" : {
             "background": "rgba(40, 40, 40, 0.9)",
@@ -89,8 +92,14 @@ global.default = {
             }, {
                 name: "delete",
                 icon: "url(./img/delete.svg)",
+            }, {
+                name: "split",
+                icon: "url(./img/split.svg)",
+            }, {
+                name: "volume",
+                icon: "url(./img/volume.svg)",
             }],
-            "volumnbar" : {
+            "volumebar" : {
                 "width": 120,
             },
             "timebar": {
@@ -122,14 +131,17 @@ global.default = {
             "bg" : "#282828"
         },
         "property": {
-            "width": 200,
-            "height": 300,
+            "width": 100,
+            "height": 200,
+        },
+        "statusbar": {
+            height: 48
         },
         "user": {
             "background": "rgba(48, 48, 48, 0.9)",
-            "width" : 200,
-            "height": 108,
-            "avatarMargin": 10,
+            "width" : 100,
+            "height": 100,
+            "avatarMargin": 0,
         }
     }
 };

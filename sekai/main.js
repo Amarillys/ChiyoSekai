@@ -6,7 +6,7 @@ global.init = function (chiyosekai) {
     const path = require('path');
     fs.readFile(path.resolve(__dirname, 'data/chiyo.json'), (err, data) => {
         if (err) return;
-        chiyosekai.loadConfig(JSON.parse(data));
+        // chiyosekai.loadConfig(JSON.parse(data));
     });
     fs.readFile(path.resolve(__dirname, 'data/sekai.json'), (err, data) => {
         if (err) return;

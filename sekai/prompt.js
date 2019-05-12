@@ -19,7 +19,7 @@ global.PromptWindow = Vue.extend({
     },
     template:
     `
-    <div id="p-mask" :style="{ opacity: active ? 0.8: 0, zIndex: active ? 233: -1 }">
+    <div id="p-mask" :style="{ opacity: active ? 0.8: 0, zIndex: active ? 233: -1 }" class="flex-center">
         <div id="prompt-window">
             <div id="header">
                 <div id="title">
@@ -43,7 +43,6 @@ global.PromptWindow = Vue.extend({
     },
     methods: {
         invoke(type, text, title, callback, params) {
-            if (this.active)
             this.title    = title || this.title;
             this.text     = text  || this.text;
             this.type     = type  || 'info';
