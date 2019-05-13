@@ -4,7 +4,6 @@ function createWindow () {
     const win = new BrowserWindow({
         width: 1024,
         height: 632,
-        frame: false,
         webPreferences: {
             nodeIntegration: true,
             webSecurity: true,
@@ -20,3 +19,6 @@ function createWindow () {
 }
 
 app.on('ready', createWindow);
+app.on('window-all-closed', () => {
+  app.quit();
+});

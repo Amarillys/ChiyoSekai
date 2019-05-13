@@ -31,7 +31,7 @@ global.default = {
         "width"   : 300,
         "windowWidth": 1024,
         "playList": ["Guest@Empty"],
-        "loopMode": "0",
+        "loopMode": 1,
         "fontColor" : "rgb(212, 195, 128)",
         "fontFamily": "\"Source Han Sans SC\", sans-serif",
         "stopAfterRemove": true

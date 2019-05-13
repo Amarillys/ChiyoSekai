@@ -1,16 +1,24 @@
 {
-  "name": "chiyosekai-electron",
-  "version": "0.0.1",
+  "name": "chiyosekai",
+  "version": "0.2.0",
   "description": "ChiyoSekai Music Player By \u0014https://github.com/Amarillys",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+	"pack": "electron-builder --dir",
+	"dist": "electron-builder"
   },
   "author": "https://github.com/Amarillys",
   "license": "ISC",
   "dependencies": {
-    "electron": "^4.0.4",
     "music-metadata": "^3.5.1",
     "vuedraggable": "^2.20.0"
+  },
+  "build": {
+	"productName": "chiyosekai",
+	"appId": "moe.misuzu.chiyo",
+	"win": {  
+      "icon": "hana.ico"
+    } 
   }
 }
