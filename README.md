@@ -6,6 +6,15 @@ On source code mode, you need a node.js. And Run these commands:
 `npm install`
 
 `npm start`
+## V0.2.2
+
++ fix data saving
++ remove unnecessary data
+
+## V0.2.1
+
++ set Default Loop Mode to once
++ fix exit dealing(processes remained)
 
 ## V0.2.0
 

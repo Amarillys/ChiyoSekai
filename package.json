@@ -1,6 +1,6 @@
 {
-  "name": "chiyosekai",
-  "version": "0.2.0",
+  "name": "ChiyoSekai",
+  "version": "0.2.2",
   "description": "ChiyoSekai Music Player By \u0014https://github.com/Amarillys",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "vuedraggable": "^2.20.0"
   },
   "build": {
-	"productName": "chiyosekai",
+	"productName": "ChiyoSekai",
+	"asar": false,
 	"appId": "moe.misuzu.chiyo",
 	"win": {  
       "icon": "hana.ico"

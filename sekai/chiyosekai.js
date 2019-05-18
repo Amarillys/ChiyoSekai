@@ -1,4 +1,3 @@
-
 global.ChiyoSekai = Vue.extend({
     data() {
         return {
@@ -9,7 +8,7 @@ global.ChiyoSekai = Vue.extend({
                     { name: 'duration', width: 50 }, { name: 'album', width: 100 }],
             playing : null,
             status  : null,
-            loop    : global.LOOP.listloop,
+            loop    : global.default.config.loopMode,
             config  : global.default.config,
             theme   : global.default.theme,
             indialog: false,
@@ -191,14 +190,16 @@ global.ChiyoSekai = Vue.extend({
         },
         saveList() {
             const fs = require('fs');
+            let listPath = require('path').resolve(__dirname, '../data/playlist');
             const list = this.lists[this.curlist];
             const originFile = list.file;
             list.file = `${list.name}@${list.user}.json`;
-            fs.writeFile(`data/playlist/${originFile}`, JSON.stringify(list, null, 4), err => {
-                if (err) console.error(err);
+            fs.writeFile(`${listPath}/${originFile}`, JSON.stringify(list, null, 4), err => {
+                if (err)
+                    this.nyan('error', this.i18n('saveFailed', list.name));
                 if (originFile !== list.file)
-                    fs.rename(`data/playlist/${originFile}`, `data/playlist/${list.file}`, console.log);
-                console.log('保存成功');
+                    fs.rename(`${listPath}/${originFile}`, `${listPath}/${list.file}`, console.log);
+                this.nyan('info', this.i18n('saveFinished', list.name));
             });
         },
         setProgress(prog) {
@@ -210,7 +211,9 @@ global.ChiyoSekai = Vue.extend({
         i18n(key, extra) {
             return {
                 deleteList: { zh_CN: `确定要删除播放列表: ${extra} 吗？`, en: `Are you sure to delete playlist: ${extra} ?` },
-                deleteMusic: { zh_CN: `确定要从播放列表移除曲子: ${extra} 吗？`, en: `Are you sure to remove music: ${extra} from playlist?` }
+                deleteMusic: { zh_CN: `确定要从播放列表移除曲子: ${extra} 吗？`, en: `Are you sure to remove music: ${extra} from playlist?` },
+                saveFinished: { zh_CN: `列表 ${extra} 保存成功！`, en: `Succeed to save playlist - ${extra}!` },
+                saveFailed: { zh_CN: `列表 ${extra} 保存失败！`, en: `Failded to save playlist - ${extra}!` }
             }[key][global.locale];
         }
     }

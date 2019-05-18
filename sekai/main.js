@@ -4,27 +4,32 @@ global.init = function (chiyosekai) {
     /* loading local config.json, check if online logined */
     const fs = require('fs');
     const path = require('path');
-    fs.readFile(path.resolve(__dirname, 'data/chiyo.json'), (err, data) => {
-        if (err) return;
-        // chiyosekai.loadConfig(JSON.parse(data));
-    });
-    fs.readFile(path.resolve(__dirname, 'data/sekai.json'), (err, data) => {
-        if (err) return;
-        chiyosekai.loadList(JSON.parse(data));
-    });
-    fs.readFile(path.resolve(__dirname, 'data/files.json'), (err, data) => {
-        if (err) return;
-        chiyosekai.loadFiles(JSON.parse(data));
-    });
-    const playlists = global.getFileList(path.resolve(__dirname, 'data/playlist'), ['son']);
-    if (playlists.length > 0) {
-        playlists.forEach(list => fs.readFile(list, (err, data) => {
-            if (err) return;
-            data = JSON.parse(data);
-            if (data.user === global.user)
-                chiyosekai.loadList(data);
-        }));
-    }
+    const { promisify } = require('util');
+    const mkdir = promisify(fs.mkdir);
+    const exist = promisify(fs.access);
+    let readList = async () => {
+        let listPath = path.resolve(__dirname, '../data');
+        try {
+            await exist(listPath);
+        } catch (e) {
+            await mkdir(listPath);
+        }
+        try {
+            await exist(listPath + '/playlist');
+        } catch (e) {
+            await mkdir(listPath + '/playlist');
+        }
+        const playlists = global.getFileList(listPath, ['son']);
+        if (playlists.length > 0) {
+            playlists.forEach(list => fs.readFile(list, (err, data) => {
+                if (err) return;
+                data = JSON.parse(data);
+                if (data.user === global.user)
+                    chiyosekai.loadList(data);
+            }));
+        }
+    };
+    readList();
 };
 
 global.getUserdata = function(userid, callback) {
