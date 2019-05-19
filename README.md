@@ -6,6 +6,11 @@ On source code mode, you need a node.js. And Run these commands:
 `npm install`
 
 `npm start`
+## V0.2.4
+
++ add icon
++ fix deprecated options in vue.draggable 
+
 ## V0.2.3
 
 + fix data saving(move to user's documents folder)
