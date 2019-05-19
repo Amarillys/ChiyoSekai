@@ -1,25 +1,30 @@
 /* config: auto load info of files */
 /* eslint-env browser */
+global.log = log => {
+    console.log(log);
+};
+
 global.init = function (chiyosekai) {
     /* loading local config.json, check if online logined */
     const fs = require('fs');
-    const path = require('path');
+    const os = require('os');
     const { promisify } = require('util');
-    const mkdir = promisify(fs.mkdir);
-    const exist = promisify(fs.access);
+    const [mkdir,  exist] = [fs.mkdir, fs.access].map(f => promisify(f));
+    let userPath = os.type().includes('Windows') ? os.homedir() + '/documents' : require('os').homedir();
+    global.dataPath = userPath + '/ChiyoSekai';
+    global.playlistPath = global.dataPath + '/playlist';
     let readList = async () => {
-        let listPath = path.resolve(__dirname, '../data');
         try {
-            await exist(listPath);
+            await exist(global.dataPath);
         } catch (e) {
-            await mkdir(listPath);
+            await mkdir(global.dataPath);
         }
         try {
-            await exist(listPath + '/playlist');
+            await exist(global.playlistPath);
         } catch (e) {
-            await mkdir(listPath + '/playlist');
+            await mkdir(global.playlistPath);
         }
-        const playlists = global.getFileList(listPath, ['son']);
+        const playlists = global.getFileList(global.playlistPath, ['son']);
         if (playlists.length > 0) {
             playlists.forEach(list => fs.readFile(list, (err, data) => {
                 if (err) return;
@@ -29,7 +34,18 @@ global.init = function (chiyosekai) {
             }));
         }
     };
+    let readConfig = async () => {
+        try {
+            global.config = global.config || {};
+            global.config = require(global.dataPath + '/config.json');
+            if (global.config.lastFolder) chiyosekai.loadFolder(global.config.lastFolder);
+            if (global.config.volume) chiyosekai.$refs.controller.$refs.volume.setProgress(global.config.volume);
+        } catch (err) {
+            global.log(err);
+        }
+    };
     readList();
+    readConfig();
 };
 
 global.getUserdata = function(userid, callback) {
@@ -74,3 +90,4 @@ global.getInfo = function(music, callback) {
 
 global.chiyosekai = new global.ChiyoSekai({ el: '#chiyosekai' });
 global.init(global.chiyosekai);
+window.onbeforeunload = () => global.chiyosekai.exit();

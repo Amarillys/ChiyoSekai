@@ -38,7 +38,7 @@ global.ChiyoSekai = Vue.extend({
                     @saveList="saveList"   @remove="removeMusic" @next="nextMusic" @openFolder="openFolder" >
                 </Controller>
                 <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist" :status="status"
-                    :theme="theme.playlist" :config="config" :playing="playing"
+                    :theme="theme.playlist" :config="config" :playing="playing" @resetPlayging="resetPlayging"
                     @playMusic="playMusic" @switchList="switchList" @choose="chooseMusic">
                 </PlayList>
                 <StatusBar ref="status" :theme="theme.statusbar" :config="config" :status="status"
@@ -53,6 +53,13 @@ global.ChiyoSekai = Vue.extend({
     </div>
     `,
     methods: {
+        setInitVolume(initVol) {
+            this.initVolume = initVol;
+        },
+        exit() {
+            this.saveList();
+            require('fs').writeFileSync(global.dataPath + '/config.json', JSON.stringify(global.config, null, 4));
+        },
         adjustTime(time) {
             this.$refs.controller.adjustTime(time);
         },
@@ -126,12 +133,13 @@ global.ChiyoSekai = Vue.extend({
             this.nyan('ask', this.i18n('deleteList', this.lists[this.curlist].name), null, {
                 'confirm': () => {
                     const list = this.lists[this.curlist];
+                    let listPath = global.playlistPath;
                     this.lists.splice(this.curlist);
                     if (this.curlist > 1)
                         this.curlist = this.curlist - 1;
                     else
                         this.addList();
-                    require('fs').rename(`data/playlist/${list.file}`, `data/playlist/${list.file}.deleted`, console.log);
+                    require('fs').rename(`${listPath}/${list.file}`, `${listPath}/${list.file}.deleted`, console.log);
                 },
                 'cancel' : () => {}
             }, null);
@@ -150,19 +158,21 @@ global.ChiyoSekai = Vue.extend({
             const dialog = require('electron').remote.dialog;
             dialog.showOpenDialog({
                 properties: ['openDirectory']
-            }, folder => {
-                if (!folder) return;
-                const files = global.getFileList(folder[0], ['mp3', 'm4a', 'aac', 'ogg', 'wav', 'lac', 'tak', 'ape'])
-                .map(file => ({
-                    name: file.slice(file.lastIndexOf('\\') + 1, file.lastIndexOf('.')),
-                    url: file
-                }));
-                this.files = [];
-                files.map(file => {
-                    global.getInfo(file, () => {
-                        file.name = file.title || file.name;
-                        this.files.push(file);
-                    });
+            }, folder => this.loadFolder(folder[0]));
+        },
+        loadFolder(folder) {
+            if (!folder) return;
+            global.config.lastFolder = folder;
+            const files = global.getFileList(folder, ['mp3', 'm4a', 'aac', 'ogg', 'wav', 'lac', 'tak', 'ape'])
+            .map(file => ({
+                name: file.slice(file.lastIndexOf('\\') + 1, file.lastIndexOf('.')),
+                url: file
+            }));
+            this.files = [];
+            files.map(file => {
+                global.getInfo(file, () => {
+                    file.name = file.title || file.name;
+                    this.files.push(file);
                 });
             });
         },
@@ -190,8 +200,8 @@ global.ChiyoSekai = Vue.extend({
         },
         saveList() {
             const fs = require('fs');
-            let listPath = require('path').resolve(__dirname, '../data/playlist');
             const list = this.lists[this.curlist];
+            let listPath = global.playlistPath;
             const originFile = list.file;
             list.file = `${list.name}@${list.user}.json`;
             fs.writeFile(`${listPath}/${originFile}`, JSON.stringify(list, null, 4), err => {
@@ -201,6 +211,9 @@ global.ChiyoSekai = Vue.extend({
                     fs.rename(`${listPath}/${originFile}`, `${listPath}/${list.file}`, console.log);
                 this.nyan('info', this.i18n('saveFinished', list.name));
             });
+        },
+        resetPlayging(changedPlaying) {
+            this.playing = changedPlaying;
         },
         setProgress(prog) {
             this.$refs.status.setProgress(prog);

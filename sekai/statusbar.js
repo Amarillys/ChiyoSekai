@@ -44,7 +44,7 @@ global.ProgressBar = Vue.extend({
         </div>`,
     computed: {
         left() {
-            return `calc(${3 + this.progress * this.lengthRate}%)`;
+            return `calc(${3 + this.progress * this.lengthRate}% - ${this.ballSize / 2}px)`;
         },
         length() {
             return this.width * this.lengthRate / 100;

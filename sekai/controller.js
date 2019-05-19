@@ -1,10 +1,10 @@
 global.Controller = Vue.extend({
-    props: ['curlist', 'lists', 'playing', 'toolbar', 'theme', 'nyan', 'loop', 'config'],
+    props: ['curlist', 'lists', 'playing', 'toolbar', 'theme', 'nyan', 'loop', 'config', 'initVolume'],
     data() {
         return {
             working: true,
             currentTime: 0,
-            volume: 1
+            volume: this.initVolume
         };
     },
     components: { ProgressBar },
@@ -49,6 +49,7 @@ global.Controller = Vue.extend({
         adjustvolume(newVol) {
             this.volume = newVol;
             this.$refs.audio.volume = newVol;
+            global.config.volume = newVol;
         },
         adjustTime(newTime) {
             let time = parseFloat(newTime * this.$refs.audio.duration);

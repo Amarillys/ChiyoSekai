@@ -27,13 +27,13 @@ global.PlayList = Vue.extend({
                         {{ text(header.name) }}
                     </th>
                 </thead>
-                <draggable v-model="lists[curlist].content" tag="tbody">
+                <draggable v-model="lists[curlist].content" tag="tbody" @end="onEnd" :options="{ handle: '.drag-handle' }">
                     <tr v-for="(music, index) in lists[curlist].content" @dblclick="$emit('playMusic', index)"
                         :class="{ activeMusic: index == active, musicRow: true }" @click="active = index" :key="index">
-                        <td v-for="header in display.slice(0, statusLocation)" class="nowrap" :title="music[header.name]">
-                            {{ music[header.name] }}
+                        <td v-for="(header, index) in display.slice(0, statusLocation)" :class="'nowrap ' + header.name" :title="music[header.name]">
+                            <span v-if="index == 0" class="drag-handle" style="padding-right: 10px">♬</span>{{ music[header.name] }}
                         </td>
-                        <td class="statusColumn">
+                        <td class="statusColumn drag-handle">
                             <img v-if="(index == playing && status !== null) || (lists[curlist].content[index].invalid)" class="status-img"
                                 :src="setStatusImg(index)"></img>
                         </td>
@@ -70,6 +70,17 @@ global.PlayList = Vue.extend({
                 duration: { zh_CN: '时长', en: 'Length' },
                 status  : { zh_CN: '状态', en: 'Status' }
             }[key][global.locale];
-        }
+        },
+        onEnd(e) {
+            if ((e.oldIndex < this.playing && e.newIndex < this.playing) ||
+                (e.oldIndex > this.playing && e.newIndex > this.playing))
+                return;
+            if (e.oldIndex === this.playing)
+                this.$emit('resetPlayging', e.newIndex);
+            if (e.oldIndex > this.playing && e.newIndex <= this.playing)
+                this.$emit('resetPlayging', this.playing + 1);
+            if (e.oldIndex < this.playing && e.newIndex >= this.playing)
+                this.$emit('resetPlayging', this.playing - 1);
+        },
     },
 });
