@@ -8,8 +8,8 @@ On source code mode, you need a node.js. And Run these commands:
 `npm start`
 ## V0.2.4
 
-+ add icon
-+ fix deprecated options in vue.draggable 
++ fix playlist template
++ add search ignore lower and upper case.
 
 ## V0.2.3
 

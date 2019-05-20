@@ -40,7 +40,7 @@ global.FileList = Vue.extend({
                 <img class="fileicon return"></img>
                 <span class="filename">{{ text("back") }}</span>
             </div>
-            <div class="file" v-for="file in view.filter(file => file.name.includes(this.search) || (file.artist && file.artist.includes(this.search)) )" @dblclick="enter(file.name)" :title="file.name">
+            <div class="file" v-for="file in view.filter(file => file.name.toLowerCase().includes(this.search.toLowerCase()) || (file.artist && file.artist.includes(this.search)) )" @dblclick="enter(file.name)" :title="file.name">
                 <img class="fileicon" :class="{ folder: !(file.child == undefined || file.child == null), music : (file.child == undefined || file.child == null) }"></img>
                 <span class="filename">{{ file.name }}</span>
             </div>

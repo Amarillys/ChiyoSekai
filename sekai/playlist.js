@@ -27,7 +27,7 @@ global.PlayList = Vue.extend({
                         {{ text(header.name) }}
                     </th>
                 </thead>
-                <draggable v-model="lists[curlist].content" tag="tbody" @end="onEnd" handle=".drag-handle" }">
+                <draggable v-model="lists[curlist].content" tag="tbody" @end="onEnd" handle=".drag-handle">
                     <tr v-for="(music, index) in lists[curlist].content" @dblclick="$emit('playMusic', index)"
                         :class="{ activeMusic: index == active, musicRow: true }" @click="active = index" :key="index">
                         <td v-for="(header, index) in display.slice(0, statusLocation)" :class="'nowrap ' + header.name" :title="music[header.name]">
