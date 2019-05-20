@@ -24,7 +24,6 @@ global.ProgressBar = Vue.extend({
             if (newProg > 1) return this.progress = 1;
             if (newProg < 0) return this.progress = 0;
             this.showProgress = this.progress;
-            this.$emit('adjust', newProg);
         }
     },
     template: `
@@ -35,7 +34,7 @@ global.ProgressBar = Vue.extend({
                 </div>
                 <div class="progress-bar-played" @mousedown="onMouseDown"
                     :style="{ left: ((100 - lengthRate) / 2) + '%', position: 'absolute',
-                        width: (progress * lengthRate + 0.5)+ '%', height: lineHeight + 'px' , backgroundColor: 'rgba(216, 124, 183, 0.9)',
+                        width: (showProgress * lengthRate + 0.5)+ '%', height: lineHeight + 'px' , backgroundColor: 'rgba(216, 124, 183, 0.9)',
                         borderRadius: lineHeight / 2 + 'px'}">
                 </div>
                 <div class="progress-bar-ball" @mousedown="onMouseDown"
@@ -98,6 +97,7 @@ global.ProgressBar = Vue.extend({
                 this.showProgress = (evt.clientX - positionStart) / this.length;
             this.progress = this.showProgress;
             this.dragging = false;
+            this.$emit('adjust', this.progress);
             evt.preventDefault();
         });
     },

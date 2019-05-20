@@ -1,10 +1,10 @@
 global.Controller = Vue.extend({
-    props: ['curlist', 'lists', 'playing', 'toolbar', 'theme', 'nyan', 'loop', 'config', 'initVolume'],
+    props: ['curlist', 'lists', 'playing', 'toolbar', 'theme', 'nyan', 'loop', 'config'],
     data() {
         return {
             working: true,
             currentTime: 0,
-            volume: this.initVolume
+            volume: 1
         };
     },
     components: { ProgressBar },
@@ -24,7 +24,7 @@ global.Controller = Vue.extend({
                 @click="btnHandler(button.name)" :title="i18n(button.name)">
             </div>
             <div style="flex-grow: 1;min-width: 30px;padding-top: 11px;padding-right: 16px;">
-                <ProgressBar ref="volume" @adjust="adjustvolume" :status="'playing'"
+                <ProgressBar ref="volume" @adjust="adjustVolume" :status="'playing'"
                     :windowWidth="config.windowWidth"></ProgressBar>
             </div>
         </div>
@@ -46,7 +46,7 @@ global.Controller = Vue.extend({
         }
     },
     methods: {
-        adjustvolume(newVol) {
+        adjustVolume(newVol) {
             this.volume = newVol;
             this.$refs.audio.volume = newVol;
             global.config.volume = newVol;
