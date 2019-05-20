@@ -6,6 +6,11 @@ On source code mode, you need a node.js. And Run these commands:
 `npm install`
 
 `npm start`
+## V0.2.5
+
++ fix progressbar bugs
++ fix loopmode and save to config
+
 ## V0.2.4
 
 + fix playlist template

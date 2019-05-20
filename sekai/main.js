@@ -4,6 +4,7 @@ global.log = log => {
     console.log(log);
 };
 
+global.config = global.config || {};
 global.init = function (chiyosekai) {
     /* loading local config.json, check if online logined */
     const fs = require('fs');
@@ -36,10 +37,8 @@ global.init = function (chiyosekai) {
     };
     let readConfig = async () => {
         try {
-            global.config = global.config || {};
             global.config = require(global.dataPath + '/config.json');
-            if (global.config.lastFolder) chiyosekai.loadFolder(global.config.lastFolder);
-            if (global.config.volume) chiyosekai.$refs.controller.$refs.volume.setProgress(global.config.volume);
+            if (global.config) chiyosekai.init(global.config);
         } catch (err) {
             global.log(err);
         }

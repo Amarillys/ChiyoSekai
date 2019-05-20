@@ -39,7 +39,7 @@ global.ChiyoSekai = Vue.extend({
                 </Controller>
                 <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist" :status="status"
                     :theme="theme.playlist" :config="config" :playing="playing" @resetPlayging="resetPlayging"
-                    @playMusic="playMusic" @switchList="switchList" @choose="chooseMusic">
+                    @playMusic="playMusic" @switchList="switchList">
                 </PlayList>
                 <StatusBar ref="status" :theme="theme.statusbar" :config="config" :status="status"
                     :music="lists[curlist].content[playing]" @adjustTime="adjustTime">
@@ -52,9 +52,20 @@ global.ChiyoSekai = Vue.extend({
         <PromptWindow @nyan="nyanInited"></PromptWindow>
     </div>
     `,
+    mounted() {
+        this.switchLoop();
+    },
     methods: {
         setInitVolume(initVol) {
             this.initVolume = initVol;
+        },
+        init(config) {
+            if (config.lastFolder) this.loadFolder(config.lastFolder);
+            if (config.volume) this.$refs.controller.$refs.volume.setProgress(config.volume);
+            if (config.loopMode !== undefined) {
+                this.loop = config.loopMode;
+                this.switchLoop();
+            }
         },
         exit() {
             this.saveList();
@@ -65,8 +76,6 @@ global.ChiyoSekai = Vue.extend({
         },
         addMusic(music) {
             this.lists[this.curlist].content.push(music);
-        },
-        chooseMusic(index) {
         },
         nextMusic() {
             let listLength = this.lists[this.curlist].content.length;
@@ -149,6 +158,7 @@ global.ChiyoSekai = Vue.extend({
                 this.loop = 0;
             else
                 this.loop++;
+            global.config.loopMode = this.loop;
             let btns = this.theme.controller.buttons;
             let loopWay = Object.keys(global.LOOP)[this.loop];
             let targetBtn = btns.map(btn => btn.name).indexOf('random');

@@ -14,6 +14,7 @@
         "Lyric": true,
         "Uint8Array": true,
         "PromptWindow": true,
+        "ProgressBar": true,
         "StatusBar": true
     }
 }

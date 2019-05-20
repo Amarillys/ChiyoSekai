@@ -1,7 +1,7 @@
 {
   "name": "ChiyoSekai",
-  "version": "0.2.2",
-  "description": "ChiyoSekai Music Player By \u0014https://github.com/Amarillys",
+  "version": "0.2.5",
+  "description": "ChiyoSekai Music Player By https://github.com/Amarillys",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
