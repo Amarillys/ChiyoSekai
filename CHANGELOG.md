@@ -1,3 +1,11 @@
+## V0.2.6.1
+
+1. add progress-bar transition animation
+2. now volume-button supports one-click.
+3. fix playlist bugs
+4. add controller buttons(refresh view)
+4. other code logic repair.
+
 ## V0.2.6
 
 fix progressbar bugs:

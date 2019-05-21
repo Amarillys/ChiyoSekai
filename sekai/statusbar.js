@@ -32,12 +32,12 @@ global.ProgressBar = Vue.extend({
                 <div class="progress-bar-line" :style="{ width: lengthRate + '%', height: lineHeight + 'px',
                     backgroundColor: lineColor, borderRadius: lineHeight / 2 + 'px'}">
                 </div>
-                <div class="progress-bar-played" @mousedown="onMouseDown"
+                <div :class="{ 'width-ease': !this.dragging, 'progress-bar-played': true }" @mousedown="onMouseDown"
                     :style="{ left: ((100 - lengthRate) / 2) + '%', position: 'absolute',
                         width: (showProgress * lengthRate + 0.5)+ '%', height: lineHeight + 'px' , backgroundColor: 'rgba(216, 124, 183, 0.9)',
                         borderRadius: lineHeight / 2 + 'px'}">
                 </div>
-                <div class="progress-bar-ball" @mousedown="onMouseDown"
+                <div :class="{ 'left-ease': !this.dragging, 'progress-bar-ball': true }" @mousedown="onMouseDown"
                     :style="{ left: left, position: 'absolute', top: (-lineHeight) + 'px',
                         width: ballSize + 'px', height: ballSize + 'px' , backgroundColor: ballColor,
                         borderRadius: ballSize / 2 + 'px', cursor: 'pointer'}">
@@ -56,9 +56,9 @@ global.ProgressBar = Vue.extend({
         }
     },
     methods: {
-        setProgress(prog) {
+        setProgress(prog, forceSetting) {
             if (prog > 1 || prog < 0) return;
-            if (this.dragging)
+            if (this.dragging && !forceSetting)
                 return;
             this.progress = prog;
             this.showProgress = prog;

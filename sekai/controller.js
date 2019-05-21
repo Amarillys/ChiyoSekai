@@ -4,7 +4,8 @@ global.Controller = Vue.extend({
         return {
             working: true,
             currentTime: 0,
-            volume: 1
+            volume: 1,
+            lastVolume: 1
         };
     },
     components: { ProgressBar },
@@ -46,7 +47,15 @@ global.Controller = Vue.extend({
         }
     },
     methods: {
+        setVolume(vol) {
+            this.lastVolume = this.volume;
+            this.volume = vol;
+            this.$refs.audio.volume = vol;
+            this.$refs.volume.setProgress(vol, true);
+        },
         adjustVolume(newVol) {
+            if (newVol > 0)
+                this.lastVolume = this.volume;
             this.volume = newVol;
             this.$refs.audio.volume = newVol;
             global.config.volume = newVol;
@@ -59,10 +68,14 @@ global.Controller = Vue.extend({
         onTimeUpdate () {
             this.currentTime = this.$refs.audio.currentTime;
         },
+        switchVolume() {
+            this.setVolume(!this.volume * this.lastVolume);
+        },
         btnHandler(button) {
             switch (button) {
                 case 'play':
-                    return this.playMusic(this.curlist, this.playing);
+                    this.$emit('setWorkList');
+                    return this.$emit('playMusic', this.playing);
                 case 'stop':
                     return this.stop();
                 case 'next':
@@ -81,10 +94,12 @@ global.Controller = Vue.extend({
                     return this.$emit('saveList');
                 case 'open':
                     return this.$emit('openFolder');
+                case 'refresh':
+                    return this.$emit('refreshFolder');
                 case 'delete':
                     return this.$emit('deleteList');
                 case 'volume':
-                    return this;
+                    return this.switchVolume();
                 case 'split':
                 default:
                     break;
@@ -147,15 +162,17 @@ global.Controller = Vue.extend({
                 ][this.loop][global.locale];
             return {
                 open   : { zh_CN: '打开目录',   en: 'Open Folder' },
+                switch : { zh_CN: '切换文件视图', en: 'Switch File View' },
                 add    : { zh_CN: '添加播放列表',   en: 'Add Playlist' },
                 play   : { zh_CN: '播放',   en: 'Play'  },
                 next   : { zh_CN: '下一曲', en: 'Next'  },
                 stop   : { zh_CN: '停止',   en: 'Stop'  },
                 pause  : { zh_CN: '暂停',   en: 'Pause' },
                 last   : { zh_CN: '上一首', en: 'Last'  },
-                remove : { zh_CN: '移除该曲', en: 'Remove this music' },
+                refresh: { zh_CN: '刷新文件列表', en: 'Refresh file list' },
                 save   : { zh_CN: '保存播放列表',  en: 'Save Playlist' },
-                split  : { zh_CN: '',       en: '' },
+                remove : { zh_CN: '移除该曲', en: 'Remove this music' },
+                split  : { zh_CN: '喵喵喵',       en: 'Nyan Nyan Nyan' },
                 delete : { zh_CN: '删除播放列表', en: 'Delete Playlist' },
                 error  : { zh_CN: '无法播放歌曲：', en: 'Cannot play music: ' },
                 volume : { zh_CN: '音量',   en: 'volume' }

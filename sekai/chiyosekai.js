@@ -3,8 +3,9 @@ global.ChiyoSekai = Vue.extend({
         return {
             files   : [{ "name": "Empty", "child": [] }],
             curlist : 0,
+            viewlist: 0,
             lists   : [{ name: 'sekai', user: 'chiyo', content: [] }],
-            listview: [{ name: 'name', width: 150 }, { name: 'artist', width: 80 },
+            headers: [{ name: 'name', width: 150 }, { name: 'artist', width: 80 },
                     { name: 'duration', width: 50 }, { name: 'album', width: 100 }],
             playing : null,
             status  : null,
@@ -32,14 +33,15 @@ global.ChiyoSekai = Vue.extend({
             </div>
             <div id="center">
                 <Controller ref="controller" :playing="playing"  :lists="lists" :theme="theme.controller"
-                          :curlist="curlist" :list="curlist"     :nyan="nyan"   :config="config"  :loop="loop"
+                    :curlist="curlist" :list="curlist"     :nyan="nyan"   :config="config" :loop="loop"
                     @pause="pauseMusic"    @addList="addList"    @stop="stopMusic" @switch="switchLoop"
-                    @playMusic="playMusic" @resume="resumeMusic" @deleteList="deleteList" @setProgress="setProgress"
+                    @playMusic="playMusic" @resume="resumeMusic" @deleteList="deleteList"
+                    @setProgress="setProgress" @setWorkList="setWorkList" @refreshFolder="refreshFolder"
                     @saveList="saveList"   @remove="removeMusic" @next="nextMusic" @openFolder="openFolder" >
                 </Controller>
-                <PlayList ref="playlist" :lists="lists" :display="listview" :curlist="curlist" :status="status"
-                    :theme="theme.playlist" :config="config" :playing="playing" @resetPlayging="resetPlayging"
-                    @playMusic="playMusic" @switchList="switchList">
+                <PlayList ref="playlist" :lists="lists" :display="headers" :curlist="curlist" :viewlist="viewlist" 
+                    :status="status" :theme="theme.playlist" :config="config" :playing="playing" @setWorkList="setWorkList"
+                    @resetPlayging="resetPlayging" @playMusic="playMusic" @switchList="switchList">
                 </PlayList>
                 <StatusBar ref="status" :theme="theme.statusbar" :config="config" :status="status"
                     :music="lists[curlist].content[playing]" @adjustTime="adjustTime">
@@ -56,12 +58,9 @@ global.ChiyoSekai = Vue.extend({
         this.switchLoop();
     },
     methods: {
-        setInitVolume(initVol) {
-            this.initVolume = initVol;
-        },
         init(config) {
             if (config.lastFolder) this.loadFolder(config.lastFolder);
-            if (config.volume) this.$refs.controller.$refs.volume.setProgress(config.volume);
+            if (config.volume) this.$refs.controller.setVolume(config.volume);
             if (config.loopMode !== undefined) {
                 this.loop = config.loopMode;
                 this.switchLoop();
@@ -126,7 +125,7 @@ global.ChiyoSekai = Vue.extend({
             this.nyan('ask', this.i18n('deleteMusic', list[target].name), null, {
                 'confirm': () => {
                     list.splice(target, 1);
-                    this.saveList();
+                    this.saveList(false);
                     resetPlaying();
                 },
                 'cancel' : () => {}
@@ -186,8 +185,14 @@ global.ChiyoSekai = Vue.extend({
                 });
             });
         },
+        refreshFolder() {
+            this.loadFolder(global.config.lastFolder);
+        },
+        setWorkList() {
+            this.curlist = this.viewlist;
+        },
         switchList(index) {
-            this.curlist = index;
+            this.viewlist = index;
         },
         loadFiles(files) {
             this.files = files;
@@ -208,8 +213,9 @@ global.ChiyoSekai = Vue.extend({
             if (!this.lists || (this.lists && this.lists[0].name === 'sekai') ) this.lists = [];
             this.lists.push(list);
         },
-        saveList() {
+        saveList(showTip) {
             const fs = require('fs');
+            showTip = showTip || true;
             const list = this.lists[this.curlist];
             let listPath = global.playlistPath;
             const originFile = list.file;
@@ -219,7 +225,8 @@ global.ChiyoSekai = Vue.extend({
                     this.nyan('error', this.i18n('saveFailed', list.name));
                 if (originFile !== list.file)
                     fs.rename(`${listPath}/${originFile}`, `${listPath}/${list.file}`, console.log);
-                this.nyan('info', this.i18n('saveFinished', list.name));
+                if (showTip)
+                    this.nyan('info', this.i18n('saveFinished', list.name));
             });
         },
         resetPlayging(changedPlaying) {

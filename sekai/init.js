@@ -31,7 +31,7 @@ global.default = {
         "width"   : 300,
         "windowWidth": 1024,
         "playList": ["Guest@Empty"],
-        "loopMode": 1,
+        "loopMode": 3,
         "fontColor" : "rgb(212, 195, 128)",
         "fontFamily": "\"Source Han Sans SC\", sans-serif",
         "stopAfterRemove": true
@@ -51,8 +51,14 @@ global.default = {
             "buttonIndent": 6,
             "lines": 1,
             "buttons": [{
+                name: "refresh",
+                icon: "url(./img/refresh.svg)",
+            }, {
                 name: "open",
                 icon: "url(./img/open.svg)",
+            }, {
+                name: "switch",
+                icon: "url(./img/folders.svg)",
             }, {
                 name: "split",
                 icon: "url(./img/split.svg)",
@@ -80,9 +86,6 @@ global.default = {
             }, {
                 name: "remove",
                 icon: "url(./img/remove.svg)",
-            }, {
-                name: "split",
-                icon: "url(./img/split.svg)",
             }, {
                 name: "add",
                 icon: "url(./img/add.svg)",

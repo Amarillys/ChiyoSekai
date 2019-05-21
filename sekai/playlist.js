@@ -7,7 +7,7 @@ global.PlayList = Vue.extend({
             statusLocation: 2
         };
     },
-    props: ['lists', 'curlist', 'display', 'theme', 'config', 'playing', 'status'],
+    props: ['lists', 'curlist', 'display', 'theme', 'config', 'playing', 'status', 'viewlist'],
     template: `
         <div id="playlist" class="chiyo-height-fill flex-auto" :style="{ background: theme.background }">
             <div id="tablist">
@@ -28,7 +28,7 @@ global.PlayList = Vue.extend({
                     </th>
                 </thead>
                 <draggable v-model="lists[curlist].content" tag="tbody" @end="onEnd" handle=".drag-handle">
-                    <tr v-for="(music, index) in lists[curlist].content" @dblclick="$emit('playMusic', index)"
+                    <tr v-for="(music, index) in lists[viewlist].content" @dblclick="onDblClick(index)"
                         :class="{ activeMusic: index == active, musicRow: true }" @click="active = index" :key="index">
                         <td v-for="(header, index) in display.slice(0, statusLocation)" :class="'nowrap ' + header.name" :title="music[header.name]">
                             <span v-if="index == 0" class="drag-handle" style="padding-right: 10px">♬</span>{{ music[header.name] }}
@@ -46,6 +46,10 @@ global.PlayList = Vue.extend({
         </div>
     `,
     methods: {
+        onDblClick(index) {
+            this.$emit('setWorkList');
+            this.$emit('playMusic', index);
+        },
         setStatusImg(index) {
             if (this.lists[this.curlist].content[index].invalid)
                 return './img/remove.svg';
