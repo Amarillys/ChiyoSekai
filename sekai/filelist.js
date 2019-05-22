@@ -1,3 +1,4 @@
+let Loading = global.Loading;
 global.FileList = Vue.extend({
     props : ['files', 'userConfig', 'theme'],
     data() {
@@ -6,23 +7,28 @@ global.FileList = Vue.extend({
             config : global.default.config,
             parent : null,
             search : '',
+            formatedFiles: null,
+            viewMode: 0,
+            sort   : 'name',
+            asc    : true,
+            loading: false
         };
     },
-    watch: {
-        files: {
-            handler(newFiles) {
-                this.view = newFiles;
-            }
-        },
+    components: { Loading },
+    computed: {
+        viewName() {
+            return Object.keys(global.VIEW)[this.viewMode];
+        }
     },
     mounted() {
-        this.view   = this.files;
         this.parent = null;
+        this.formatedFiles = this.view;
     },
     template :
     `
     <div id="file-container" :style="{ width: config.width + 'px' }">
-        <div >
+        <Loading v-if="loading"></Loading>
+        <div>
             <input id="filesearch" type="text" v-model="search" :style="{
                 height: theme.searchHeight + 'px',
                 fontSize   : theme.searchSize,
@@ -41,13 +47,56 @@ global.FileList = Vue.extend({
                 <span class="filename">{{ text("back") }}</span>
             </div>
             <div class="file" v-for="file in view.filter(file => file.name.toLowerCase().includes(this.search.toLowerCase()) || (file.artist && file.artist.includes(this.search)) )" @dblclick="enter(file.name)" :title="file.name">
-                <img class="fileicon" :class="{ folder: !(file.child == undefined || file.child == null), music : (file.child == undefined || file.child == null) }"></img>
+                <img class="fileicon" :class="{ [viewName]: true,  folder: !(file.child == undefined || file.child == null), music : (file.child == undefined || file.child == null) }"></img>
                 <span class="filename">{{ file.name }}</span>
             </div>
         </div>
     </div>
     `,
-    methods  : {
+    methods : {
+        setLoading(loading) {
+            this.loading = loading;
+        },
+        formatFiles(viewMode) {
+            this.viewMode = viewMode;
+            let groupElement = 'artist';
+            let dictionary = {};
+            let retFiles = [];
+            switch (this.viewMode) {
+                case global.VIEW.album:
+                    groupElement = 'album';
+                case global.VIEW.artist:
+                    for (let i = 0; i < this.files.length; ++i) {
+                        let ele = this.files[i][groupElement] || 'others';
+                        let separator = ele.includes('&') ? '&' : '/';
+                        if (groupElement === 'artist' && ele.includes(separator)) {
+                            let artists = ele.split(separator);
+                            artists.forEach(artist => {
+                                artist = artist.trim();
+                                dictionary[artist] = dictionary[artist] || [];
+                                dictionary[artist].push(this.files[i]);
+                            });
+                        } else {
+                            dictionary[ele] = dictionary[ele] || [];
+                            dictionary[ele].push(this.files[i]);
+                        }
+                    }
+                    let elements = Object.keys(dictionary);
+                    for (let i = 0; i < elements.length; ++i) {
+                        retFiles.push({
+                            name: elements[i],
+                            child: dictionary[elements[i]]
+                        });
+                    }
+                    this.formatedFiles = retFiles;
+                    break;
+                case global.VIEW.folder:
+                case global.VIEW.all:
+                default:
+                    this.formatedFiles = this.files;
+            }
+            this.view = this.formatedFiles;
+        },
         text(key) {
             return {
                 back : { zh_CN: '返 回', en: 'Back' }
@@ -64,7 +113,7 @@ global.FileList = Vue.extend({
                     content: this.view,
                     parent : this.parent
                 };
-                this.view   = target.child.filter(file => file.name.includes(this.search));
+                this.view = target.child.filter(file => file.name.includes(this.search));
             } else {
                 this.$emit('addMusic', target);
             }

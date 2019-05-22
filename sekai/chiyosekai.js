@@ -3,6 +3,7 @@ global.ChiyoSekai = Vue.extend({
         return {
             files   : [{ "name": "Empty", "child": [] }],
             curlist : 0,
+            viewMode: 0,
             viewlist: 0,
             lists   : [{ name: 'sekai', user: 'chiyo', content: [] }],
             headers: [{ name: 'name', width: 150 }, { name: 'artist', width: 80 },
@@ -12,7 +13,6 @@ global.ChiyoSekai = Vue.extend({
             loop    : global.default.config.loopMode,
             config  : global.default.config,
             theme   : global.default.theme,
-            indialog: false,
             nyan    : null,
             randomList :[],
             userinfo: { username: "chiyo" }
@@ -24,7 +24,8 @@ global.ChiyoSekai = Vue.extend({
     <div style="height:100%; width: 100%">
         <div id="chiyosekai" :style="{ height: '100%', width: '100%', background: theme.global.background }">
             <div id="chiyo-left">
-                <FileList ref="filelist" :files="files" @addMusic="addMusic" :theme="theme.filelist"></FileList>
+                <FileList ref="filelist" :files="files" @addMusic="addMusic" :theme="theme.filelist">
+                </FileList>
                 <div class="leftbottom">
                     <div class="chiyo-right">
                         <Cover ref="cover" :theme="theme.cover"></Cover>
@@ -35,7 +36,7 @@ global.ChiyoSekai = Vue.extend({
                 <Controller ref="controller" :playing="playing"  :lists="lists" :theme="theme.controller"
                     :curlist="curlist" :list="curlist"     :nyan="nyan"   :config="config" :loop="loop"
                     @pause="pauseMusic"    @addList="addList"    @stop="stopMusic" @switch="switchLoop"
-                    @playMusic="playMusic" @resume="resumeMusic" @deleteList="deleteList"
+                    @playMusic="playMusic" @resume="resumeMusic" @deleteList="deleteList" @switchView="switchView"
                     @setProgress="setProgress" @setWorkList="setWorkList" @refreshFolder="refreshFolder"
                     @saveList="saveList"   @remove="removeMusic" @next="nextMusic" @openFolder="openFolder" >
                 </Controller>
@@ -56,6 +57,7 @@ global.ChiyoSekai = Vue.extend({
     `,
     mounted() {
         this.switchLoop();
+        this.switchView(0);
     },
     methods: {
         init(config) {
@@ -63,7 +65,11 @@ global.ChiyoSekai = Vue.extend({
             if (config.volume) this.$refs.controller.setVolume(config.volume);
             if (config.loopMode !== undefined) {
                 this.loop = config.loopMode;
-                this.switchLoop();
+                this.switchLoop(this.loop);
+            }
+            if (config.viewMode !== undefined) {
+                this.viewMode = config.viewMode;
+                this.switchView(this.viewMode);
             }
         },
         exit() {
@@ -152,16 +158,28 @@ global.ChiyoSekai = Vue.extend({
                 'cancel' : () => {}
             }, null);
         },
-        switchLoop() {
-            if (this.loop >= 4)
-                this.loop = 0;
+        switchLoop(loop) {
+            if (!loop)
+                this.loop = this.loop >= Object.keys(global.LOOP).length - 1 ? 0 : this.loop + 1;
             else
-                this.loop++;
+                this.loop = loop;
             global.config.loopMode = this.loop;
             let btns = this.theme.controller.buttons;
             let loopWay = Object.keys(global.LOOP)[this.loop];
             let targetBtn = btns.map(btn => btn.name).indexOf('random');
             btns[targetBtn].icon = `url(./img/${loopWay}.svg)`;
+        },
+        switchView(view) {
+            if (!view)
+                this.viewMode = this.viewMode >= Object.keys(global.VIEW).length - 1 ? 0 : this.viewMode + 1;
+            else
+                this.viewMode = view;
+            global.config.viewMode = this.viewMode;
+            let btns = this.theme.controller.buttons;
+            let viewWay = Object.keys(global.VIEW)[this.viewMode];
+            let targetBtn = btns.map(btn => btn.name).indexOf('switch');
+            btns[targetBtn].icon = `url(./img/${viewWay}.svg)`;
+            this.$refs.filelist.formatFiles(this.viewMode);
         },
         openFolder() {
             const dialog = require('electron').remote.dialog;
@@ -172,21 +190,28 @@ global.ChiyoSekai = Vue.extend({
         loadFolder(folder) {
             if (!folder) return;
             global.config.lastFolder = folder;
+            this.$refs.filelist.setLoading(true);
             const files = global.getFileList(folder, ['mp3', 'm4a', 'aac', 'ogg', 'wav', 'lac', 'tak', 'ape'])
             .map(file => ({
                 name: file.slice(file.lastIndexOf('\\') + 1, file.lastIndexOf('.')),
                 url: file
             }));
             this.files = [];
+            let counter = 0;
             files.map(file => {
                 global.getInfo(file, () => {
                     file.name = file.title || file.name;
                     this.files.push(file);
+                    if (++counter === files.length) {
+                        this.$refs.filelist.formatFiles(this.viewMode);
+                        this.$refs.filelist.setLoading(false);
+                    }
                 });
             });
         },
         refreshFolder() {
             this.loadFolder(global.config.lastFolder);
+            this.$refs.filelist.initView();
         },
         setWorkList() {
             this.curlist = this.viewlist;

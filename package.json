@@ -1,6 +1,6 @@
 {
   "name": "ChiyoSekai",
-  "version": "0.2.6.1",
+  "version": "0.2.7",
   "description": "ChiyoSekai Music Player By https://github.com/Amarillys",
   "main": "index.js",
   "scripts": {

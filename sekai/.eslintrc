@@ -15,6 +15,7 @@
         "Uint8Array": true,
         "PromptWindow": true,
         "ProgressBar": true,
-        "StatusBar": true
+        "StatusBar": true,
+        "Loading": true
     }
 }

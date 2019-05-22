@@ -94,6 +94,8 @@ global.Controller = Vue.extend({
                     return this.$emit('saveList');
                 case 'open':
                     return this.$emit('openFolder');
+                case 'switch':
+                    return this.$emit('switchView');
                 case 'refresh':
                     return this.$emit('refreshFolder');
                 case 'delete':

@@ -38,12 +38,14 @@ input {
 }
 
 #file-container {
+  position: relative;
   height: calc(100% - 300px);
 }
 
 #filelist {
   padding-top : 5px;
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
   height: calc(100% - 39px);
   overflow: auto;
 }
@@ -89,10 +91,12 @@ input {
 }
 
 .filename {
-  display: block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
+  /* to show the ellipsis at last line */
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical
 }
 
 .nowrap {
@@ -117,7 +121,6 @@ input {
 #cover, #propertyWin {
   display: inline-block;
   box-sizing: border-box;
-  -webkit-app-region: drag;
 }
 
 #center {
@@ -298,4 +301,59 @@ img.status-img {
 #username {
   color: var(--font-color);
   text-align: center;
+}
+
+.left-ease {
+  transition: left ease 0.2s;
+}
+
+.width-ease {
+  transition: width ease 0.2s;
+}
+
+.folder.album {
+  content: url(../img/album.svg);
+}
+
+.folder.artist {
+  content: url(../img/artist.svg);
+}
+.lds-mask {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 233;
+}
+/* https://loading.io/css/ */
+.lds-ripple {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: auto;
+}
+.lds-ripple div {
+  position: relative;
+  border: 5px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1.3s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 28px;
+    left: 28px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    border-width: 2px;
+    top: -1px;
+    left: -1px;
+    width: 58px;
+    height: 58px;
+    opacity: 0;
+  }
 }

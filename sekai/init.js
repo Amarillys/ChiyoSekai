@@ -16,6 +16,22 @@ global.uuid = () => {
     });
 };
 
+global.Loading = Vue.extend({
+    template:
+    `<div class="lds-mask">
+        <div class="lds-ripple">
+            <div></div>
+        </div>
+    </div>`
+});
+
+global.VIEW = {
+    all: 0,
+    folders: 1,
+    artist: 2,
+    album: 3
+};
+
 global.LOOP = {
     listloop: 0,
     listonce: 1,

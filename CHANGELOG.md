@@ -1,3 +1,9 @@
+## V0.2.7 FileList improve
+
+1. finish basic album and artist group-show.
+2. reconstruct part of filelist logic.
+3. fix some code bug(loop mode setting).
+
 ## V0.2.6.1
 
 1. add progress-bar transition animation
