@@ -19,7 +19,9 @@ global.PromptWindow = Vue.extend({
     },
     template:
     `
-    <div id="p-mask" :style="{ opacity: active ? 0.8: 0, zIndex: active ? 233: -1 }" class="flex-center">
+    <div id="p-mask" class="flex-center" :style="{
+        opacity: active ? 0.8: 0, zIndex: active ? 233: -1,
+        display: active ? 'flex' : 'none' }">
         <div id="prompt-window">
             <div id="header">
                 <div id="title">
@@ -42,13 +44,15 @@ global.PromptWindow = Vue.extend({
         global.nyan = this.invoke;
     },
     methods: {
-        invoke(type, text, title, callback, params) {
+        invoke(type, text, title, callback, params, timeout) {
             this.title    = title || this.title;
             this.text     = text  || this.text;
             this.type     = type  || 'info';
             this.callback = callback;
             this.params   = params;
             this.active   = true;
+            if (timeout > 0)
+                setTimeout( () => this.active = false, timeout);
         },
         i18n(key) {
             return {

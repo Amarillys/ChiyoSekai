@@ -90,3 +90,7 @@ global.getInfo = function(music, callback) {
 global.chiyosekai = new global.ChiyoSekai({ el: '#chiyosekai' });
 global.init(global.chiyosekai);
 window.onbeforeunload = () => global.chiyosekai.exit();
+let css = document.createElement('link');
+css.rel = 'stylesheet';
+css.href = global.dataPath + '/custom.css';
+document.getElementsByTagName('head')[0].appendChild(css);

@@ -1,3 +1,8 @@
+## v0.2.8 custom css support and fixes
+
+1. fix custom css support.
+2. fix playlist switch bug.
+
 ## V0.2.7 FileList improve
 
 1. finish basic album and artist group-show.

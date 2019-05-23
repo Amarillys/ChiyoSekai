@@ -8,9 +8,8 @@ global.Cover = Vue.extend({
     template:
     `
     <div id="cover" :style="{
-        width: theme.width + 'px',
-        height: theme.height + 'px',
-        background: theme.background
+        width: theme.width + 'px', height: theme.height + 'px',
+        background: theme.background, opacity: theme.opacity
     }">
         <img id="cover" :src="this.url" :style="{ width: theme.width + 'px', height: theme.height + 'px' }">
     </div>

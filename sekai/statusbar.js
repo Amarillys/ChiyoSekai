@@ -27,7 +27,7 @@ global.ProgressBar = Vue.extend({
         }
     },
     template: `
-        <div :style="{ height: ballSize + 'px'}">
+        <div :style="{ height: ballSize + 'px' }">
             <div class="progress-bar flex-center" ref="outbar" style="user-select: none;position: relative;width: 100%;">
                 <div class="progress-bar-line" :style="{ width: lengthRate + '%', height: lineHeight + 'px',
                     backgroundColor: lineColor, borderRadius: lineHeight / 2 + 'px'}">
@@ -113,10 +113,10 @@ function registerMouseUp(func) {
 
 let ProgressBar = global.ProgressBar;
 global.StatusBar = Vue.extend({
-    props: ['theme', 'config', 'music', 'status'],
+    props: ['theme', 'config', 'music', 'status', 'theme'],
     components: { ProgressBar },
     template: `
-    <div id="status-bar" :style="{ height: theme.height + 'px' }" class="flex-fixed">
+    <div id="status-bar" :style="{ height: theme.height + 'px', backgroundColor: theme.background }" class="flex-fixed">
         <div :style="{ padding: '2px 3% 5px 3%', color: config.fontColor, fontSize: '1.1rem' }">Now Playing: {{ music ? music.name : ''}}
         </div>
         <div>

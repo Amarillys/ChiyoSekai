@@ -1,6 +1,6 @@
 /* PromptWindow Style */
 :root {
-  --title-bg: rgba(26, 26, 26, 0.9);
+  --title-bg: rgba(30, 30, 30, 0.8);
   --font-color: rgb(212, 195, 128, 0.95);
   --font-family: "思源黑体", "微软雅黑";
 }
@@ -8,6 +8,7 @@
 html, body {
   height: 100%;
   width: 100%;
+  background-color: var(--title-bg);
   font-family: '微软雅黑', sans-serif;
 }
 
@@ -60,7 +61,7 @@ input {
 }
 
 #filesearch:focus {
-  outline-color: rgba(116, 175, 226, 0.9)
+  outline-color: rgba(116, 175, 226, 0.85);
 }
 
 .file {
@@ -148,7 +149,7 @@ input {
 
 #tablist {
   width: 100%;
-  background-color: rgba(40, 40, 40, 1.0);
+  background-color: rgba(40, 40, 40, 0.8);
   position: sticky;
   top: 0;
 }
@@ -164,16 +165,16 @@ input {
 }
 
 #list tr {
-  background:rgba(50,50,50,0.9);
+  background:rgba(50, 50, 50,0.7);
   display: table-row;
 }
 
 #list tr:nth-of-type(odd) {
-  background: rgba(0, 0, 0, 0);
+  background: rgba(30, 30, 30, 0.7);
 }
 
 #list tr.activeMusic {
-  background-color: #395647;
+  background-color: rgba(64, 86, 70, 0.8);
 }
 
 .tab {
@@ -188,7 +189,7 @@ input {
 
 .tab.inactive {
   color: #D4C380;
-  background: rgba(40, 40, 40, 0.9)
+  background: rgba(40, 40, 40, 0.8)
 }
 
 td {
@@ -245,7 +246,7 @@ img.status-img {
 
 #prompt-window {
   width: 300px;
-  background-color: rgba(57, 65, 68, 0.9);
+  background-color: rgba(57, 65, 68, 0.85);
   border-radius: 8px;
   z-index: 955159879465;
 }

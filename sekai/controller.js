@@ -123,7 +123,7 @@ global.Controller = Vue.extend({
                 this.$refs.source.setAttribute('src', null);
                 music.invalid = true;
                 this.$emit('next');
-                this.nyan('info', this.i18n('error') + music.name);
+                this.nyan('info', this.i18n('error') + music.name, null, null, null, 2333);
             });
         },
         pause() {

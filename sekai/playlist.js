@@ -14,7 +14,7 @@ global.PlayList = Vue.extend({
                 <input v-for="list, index in lists" class="tab" @click="switchList(index)"
                     :style="{ height: theme.tab.height + 'px', fontSize: theme.tab.fontSize,
                         maxWidth: theme.tab.maxWidth, textAlign: 'center', width: (list.name.length * 18) + 'px' }"
-                    :class="{ active: index == curlist, inactive: index != curlist, noborder: true }"
+                    :class="{ active: index == viewlist, inactive: index != viewlist, noborder: true }"
                     v-model="list.name" :readonly="editable != index" @dblclick="editable = index" @blur="editable = -1">
                 </input>
             </div>
@@ -27,14 +27,14 @@ global.PlayList = Vue.extend({
                         {{ text(header.name) }}
                     </th>
                 </thead>
-                <draggable v-model="lists[curlist].content" tag="tbody" @end="onEnd" handle=".drag-handle">
+                <draggable v-model="lists[viewlist].content" tag="tbody" @end="onEnd" handle=".drag-handle">
                     <tr v-for="(music, index) in lists[viewlist].content" @dblclick="onDblClick(index)"
                         :class="{ activeMusic: index == active, musicRow: true }" @click="active = index" :key="index">
                         <td v-for="(header, index) in display.slice(0, statusLocation)" :class="'nowrap ' + header.name" :title="music[header.name]">
                             <span v-if="index == 0" class="drag-handle" style="padding-right: 10px">♬</span>{{ music[header.name] }}
                         </td>
                         <td class="statusColumn drag-handle">
-                            <img v-if="(index == playing && status !== null) || (lists[curlist].content[index].invalid)" class="status-img"
+                            <img v-if="(index == playing && status !== null) || (lists[viewlist].content[index].invalid)" class="status-img"
                                 :src="setStatusImg(index)"></img>
                         </td>
                         <td v-for="header in display.slice(statusLocation)" class="nowrap" :title="music[header.name]">

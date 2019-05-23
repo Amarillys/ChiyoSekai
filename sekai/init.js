@@ -54,12 +54,13 @@ global.default = {
     },
     "theme" : {
         "cover": {
-            "background": "rgba(30, 30, 30, 0.9)",
+            "background": "rgba(30, 30, 30, 0.8)",
             "height": 300,
-            "width" : 300
+            "width" : 300,
+            "opacity": 0.86
         },
         "controller" : {
-            "background": "rgba(40, 40, 40, 0.9)",
+            "background": "rgba(40, 40, 40, 0.7)",
             "width": 600,
             "height": 30,
             "buttonWidth": 24,
@@ -126,10 +127,10 @@ global.default = {
             }
         },
         "global": {
-            "background": "#1E1E1E"
+            "background": "rbga(30, 30, 30, 0.8)"
         },
         "playlist": {
-            "background": "rbga(30, 30, 30, 0.9)",
+            "background": "rbga(30, 30, 30, 0.85)",
             "width": 700,
             "tab" : {
                 "height": 24,
@@ -138,8 +139,8 @@ global.default = {
             }
         },
         "filelist": {
-            "background"  : "rgba(40, 40, 40, 0.9)",
-            "searchBg": "rgba(48, 48, 48, 0.9)",
+            "background"  : "rgba(40, 40, 40, 0.8)",
+            "searchBg": "rgba(48, 48, 48, 0.8)",
             "searchSize": "1.2em",
             "searchColor": "#D4C380",
             "searchHeight": 32,
@@ -154,7 +155,8 @@ global.default = {
             "height": 200,
         },
         "statusbar": {
-            height: 48
+            "background": "rgba(48, 48, 48, 0.5)",
+            "height": 48
         },
         "user": {
             "background": "rgba(48, 48, 48, 0.9)",
