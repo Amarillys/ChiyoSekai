@@ -1,6 +1,14 @@
+/* PromptWindow Style */
+:root {
+  --title-bg: rgba(30, 30, 30, 0.8);
+  --font-color: rgb(212, 195, 128, 0.95);
+  --font-family: "思源黑体", "微软雅黑";
+}
+
 html, body {
   height: 100%;
   width: 100%;
+  background-color: var(--title-bg);
   font-family: '微软雅黑', sans-serif;
 }
 
@@ -17,7 +25,13 @@ body {
 }
 
 .chiyo-left, .chiyo-right {
-  display: inline-block;
+  display: table-footer-group;
+  height: 300px;
+  display: grid;
+}
+
+.leftbottom {
+  display: flex;
 }
 
 input {
@@ -25,32 +39,20 @@ input {
 }
 
 #file-container {
-  height: calc(100% - 306px);
+  position: relative;
+  height: calc(100% - 300px);
 }
 
 #filelist {
   padding-top : 5px;
-  display: block;
-  height: calc(100% - 38px);
+  display: flex;
+  flex-wrap: wrap;
+  height: calc(100% - 39px);
   overflow: auto;
 }
 
 #filelist>.file {
   margin-left: 5px;
-}
-
-#filelist::-webkit-scrollbar {
-  width: 15px;
-}
-
-#filelist::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: rgba(88, 88, 88, 0.6);
-}
-
-.chiyo-height-fill {
-  height: -webkit-fill-available;
-  height: fill-available;
 }
 
 #filesearch {
@@ -59,7 +61,7 @@ input {
 }
 
 #filesearch:focus {
-  outline-color: rgba(116, 175, 226, 0.9)
+  outline-color: rgba(116, 175, 226, 0.85);
 }
 
 .file {
@@ -84,12 +86,18 @@ input {
 .music {
   content: url(../img/music.svg)
 }
+.musicRow {
+  height: 27px;
+  padding: 0;
+}
 
 .filename {
-  display: block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
+  /* to show the ellipsis at last line */
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical
 }
 
 .nowrap {
@@ -98,8 +106,13 @@ input {
   overflow: hidden;
 }
 
+#toolbar {
+  display: flex;
+  width: 100%;
+}
+
 .toolbtn {
-  display: inline-block;
+  flex-shrink: 0;
 }
 
 .toolbtn:hover {
@@ -108,25 +121,37 @@ input {
 
 #cover, #propertyWin {
   display: inline-block;
+  box-sizing: border-box;
 }
 
 #center {
-  display: inline-block;
-  width: calc(100% - 400px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: calc(100% - 300px);
 }
 
 #playlist {
-  height: calc(100% - 33px);
-}
-
-#list {
-  height: 724px;
-  border-collapse: collapse;
+  height: auto;
+  overflow: auto;
   text-align: center;
 }
 
-#list td {
-  font-weight: 500;
+#list {
+  width: 100%;
+}
+
+#list th{
+  position: sticky;
+  top: 26px;
+  background: #1e3d56;
+}
+
+#tablist {
+  width: 100%;
+  background-color: rgba(40, 40, 40, 0.8);
+  position: sticky;
+  top: 0;
 }
 
 .header {
@@ -134,21 +159,22 @@ input {
   padding-right: 20px;
 }
 
-table>thead {
+#list>thead {
   color: #ffffff;
   background: #1e3d56;
 }
 
-tr {
-  background: #00000000;
+#list tr {
+  background:rgba(50, 50, 50,0.7);
+  display: table-row;
 }
 
-tr:nth-of-type(odd) {
-  background: rgba(50,50,50,0.9);
+#list tr:nth-of-type(odd) {
+  background: rgba(30, 30, 30, 0.7);
 }
 
-tr.activeMusic {
-  background: #395647;
+#list tr.activeMusic {
+  background-color: rgba(64, 86, 70, 0.8);
 }
 
 .tab {
@@ -163,7 +189,20 @@ tr.activeMusic {
 
 .tab.inactive {
   color: #D4C380;
-  background: rgba(40, 40, 40, 0.9)
+  background: rgba(40, 40, 40, 0.8)
+}
+
+td {
+  height: 27px;
+  table-layout: fixed;
+  padding: 0;
+}
+td.statusColumn {
+  display: inline-flex;
+}
+
+img.status-img {
+  width: 18px;
 }
 
 .noborder {
@@ -184,13 +223,6 @@ tr.activeMusic {
   border-radius: 1rem;
 }
 
-/* PromptWindow Style */
-:root {
-  --title-bg: rgba(26, 26, 26, 0.9);
-  --font-color: rgba(233, 233, 233, 0.9);
-  --font-family: "思源黑体", "微软雅黑";
-}
-
 #p-mask {
   background-color: rgba(42, 52, 55);
   height: 100%;
@@ -198,11 +230,14 @@ tr.activeMusic {
   position: fixed;
   top: 0;
   left: 0;
+  backdrop-filter: blur(3px);
+  transition: opacity 0.5s ease-in;
+}
+
+.flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(3px);
-  transition: opacity 0.5s ease-in;
 }
 
 #prompt-window > #body {
@@ -211,7 +246,7 @@ tr.activeMusic {
 
 #prompt-window {
   width: 300px;
-  background-color: rgba(57, 65, 68, 0.9);
+  background-color: rgba(57, 65, 68, 0.85);
   border-radius: 8px;
   z-index: 955159879465;
 }
@@ -252,4 +287,74 @@ tr.activeMusic {
 #prompt-window button:hover {
   background-color: rgba(36, 36, 36, 0.9);
   transition: background-color 0.3s ease-in;
+}
+
+.flex-fixed {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.flex-auto {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+#username {
+  color: var(--font-color);
+  text-align: center;
+}
+
+.left-ease {
+  transition: left ease 0.2s;
+}
+
+.width-ease {
+  transition: width ease 0.2s;
+}
+
+.folder.album {
+  content: url(../img/album.svg);
+}
+
+.folder.artist {
+  content: url(../img/artist.svg);
+}
+.lds-mask {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 233;
+}
+/* https://loading.io/css/ */
+.lds-ripple {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: auto;
+}
+.lds-ripple div {
+  position: relative;
+  border: 5px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1.3s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 28px;
+    left: 28px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    border-width: 2px;
+    top: -1px;
+    left: -1px;
+    width: 58px;
+    height: 58px;
+    opacity: 0;
+  }
 }
